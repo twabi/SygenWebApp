@@ -145,6 +145,8 @@ const Users = () => {
 
     const deleteUser = (objectID) => {
 
+        alert("Currently not supported!");
+        /*
         var payload = {
             "uid": objectID
         }
@@ -184,6 +186,8 @@ const Users = () => {
                 setDeleteAlert(true);
             }
         });
+
+         */
 
     }
 
