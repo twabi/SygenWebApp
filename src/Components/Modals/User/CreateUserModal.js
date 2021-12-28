@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {DatePicker, Form, Input, Select} from "antd";
-import {Button} from "evergreen-ui";
+import {Button} from "antd";
 import FireFetch from "../../FireFetch";
 import emailjs from "emailjs-com";
 import {MDBAlert} from "mdbreact";
@@ -196,7 +196,7 @@ const CreateUserModal = (props) => {
                             : null }
                     </Form.Item>
 
-                    <Button appearance="primary" htmlType="submit" isLoading={showLoading}>
+                    <Button type="primary" htmlType="submit" style={{background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
                         Create
                     </Button>
 

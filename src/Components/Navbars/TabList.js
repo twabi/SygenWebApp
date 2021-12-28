@@ -45,7 +45,7 @@ const TabList = (props) => {
                 aria-controls={`panel-${"/home"}`}
             >
                 <MDBIcon icon="home" size="lg" className="mr-3 d-inline"/>
-                {collapsed? null :<Heading className="d-inline" size={600}><Text className={"/home" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Home</Text></Heading>}
+                {collapsed? null :<Heading className="d-inline" size={500}><Text className={"/home" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Home</Text></Heading>}
             </Menu.Item>
 
             <Menu.Item
@@ -58,7 +58,7 @@ const TabList = (props) => {
                 aria-controls={`panel-${"/users"}`}
             >
                 <MDBIcon icon="users" size="lg" className="mr-3"/>
-                {collapsed? null : <Heading className="d-inline" size={600}><Text className={"/users" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Members</Text></Heading>}
+                {collapsed? null : <Heading className="d-inline" size={500}><Text className={"/users" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Members</Text></Heading>}
             </Menu.Item>
 
             <Menu.Item
@@ -71,7 +71,7 @@ const TabList = (props) => {
                 aria-controls={`panel-${"/projects"}`}
             >
                 <MDBIcon icon="project-diagram" size="lg" className="mr-3"/>
-                {collapsed? null : <Heading className="d-inline" size={600}><Text className={"/projects" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Projects</Text></Heading>}
+                {collapsed? null : <Heading className="d-inline" size={500}><Text className={"/projects" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Projects</Text></Heading>}
             </Menu.Item>
 
             <Menu.Item
@@ -84,7 +84,7 @@ const TabList = (props) => {
                 aria-controls={`panel-${"/tasks"}`}
             >
                 <MDBIcon icon="clipboard-list" size="lg" className="mr-3"/>
-                {collapsed? null : <Heading className="d-inline" size={600}><Text className={"/tasks" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Tasks</Text></Heading>}
+                {collapsed? null : <Heading className="d-inline" size={500}><Text className={"/tasks" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Tasks</Text></Heading>}
             </Menu.Item>
 
 

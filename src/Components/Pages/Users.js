@@ -204,14 +204,13 @@ const Users = () => {
 
                                 <Dialog
                                     isShown={showModal}
-                                    title="Create New User"
+                                    title="Create New Member"
                                     onCloseComplete={() => {setShowModal(false)}}
                                     shouldCloseOnOverlayClick={false}
                                     hasFooter={false}>
 
                                     <MDBCol md={12}>
                                         <CreateUserModal modal={setShowModal}/>
-
                                     </MDBCol>
 
                                 </Dialog>
@@ -225,7 +224,6 @@ const Users = () => {
 
                                     <MDBCol md={12}>
                                         <EditUserModal editUser={editUser} modal={setShowEditModal}/>
-
                                     </MDBCol>
 
                                 </Dialog>
@@ -275,7 +273,7 @@ const Users = () => {
                                             </div>
 
                                             <MDBRow className="ml-1">
-                                                <SearchInput height={40} placeholder="Search Sales Reps..." className="w-100"   onChange={e => handleSearch(e.target.value)} />
+                                                <SearchInput height={40} placeholder="Search members" className="w-100"   onChange={e => handleSearch(e.target.value)} />
                                                 <Button size="large" type="primary" style={{background: "#f06000", borderColor: "#f06000"}} className="mx-2" onClick={() => {setShowModal(true)}}>
                                                     New Member
                                                 </Button>
