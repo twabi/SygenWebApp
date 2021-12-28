@@ -179,7 +179,8 @@ const CreateUserModal = (props) => {
                                     optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                                 }
                                 onChange={changeRole}>
-                            {["Team leader", "Chief Coder", "Task Master", "Web Master", "Code Master", "Developer", "Sales Manager", "Sales Assistant"].map((item, index) => (
+                            {["Team leader", "Chief Coder", "Task Master", "Web Master",
+                                "Code Master", "Developer", "Sales Manager", "Sales Assistant"].map((item, index) => (
                                 <Select.Option key={index}  value={item}>{item}</Select.Option>
                             ))}
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {DatePicker, Form, Input, Select} from "antd";
+import {Form, Input, Select} from "antd";
 import {Button} from "evergreen-ui";
 import {MDBAlert} from "mdbreact";
 
@@ -12,7 +12,6 @@ const moment = require("moment");
 const EditUserModal = (props) => {
 
     const [user, setUser] = useState(props.editUser)
-    const [DOB, setDOB] = useState(null);
     const [gender, setGender] = useState(null);
     const [role, setRole] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
@@ -24,9 +23,6 @@ const EditUserModal = (props) => {
     function changeGender(option) {
         setGender(option);
     }
-    function onChangeOne(date, dateString) {
-        setDOB(dateString);
-    }
     function changeRole(option) {
         setRole(option);
     }
@@ -35,7 +31,6 @@ const EditUserModal = (props) => {
     useEffect(() => {
         setUser(props.editUser);
         setGender(props.editUser.gender);
-        setDOB(props.editUser.dob);
         setRole(props.editUser.role);
     }, [props.editUser])
 
@@ -55,7 +50,6 @@ const EditUserModal = (props) => {
             "email" : email,
             "phone" : phone,
             "gender" : gender,
-            "dob" : DOB,
             "department" : department,
             "role" : role,
         };
@@ -108,16 +102,6 @@ const EditUserModal = (props) => {
                 <Form.Item label="Phone">
                     <Input type="phone" defaultValue={user.phone} placeholder="enter user phone number" id="phone"/>
                 </Form.Item>
-                <Form.Item
-                    label="Select Date of Birth">
-                    <DatePicker
-                        placeholder="select starting date"
-                        picker={"date"}
-                        value={!DOB ? undefined : moment(DOB, "YYYY-MM-DD")}
-                        className="w-100"
-                        onChange={onChangeOne} />
-
-                </Form.Item>
 
                 <Form.Item label="Gender">
                     <Select placeholder="Select user gender"
@@ -152,7 +136,8 @@ const EditUserModal = (props) => {
                                 optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                             }
                             onChange={changeRole}>
-                        {["Admin", "SalesRep"].map((item, index) => (
+                        {["Team leader", "Chief Coder", "Task Master", "Web Master",
+                            "Code Master", "Developer", "Sales Manager", "Sales Assistant"].map((item, index) => (
                             <Select.Option key={index}  value={item}>{item}</Select.Option>
                         ))}
 
@@ -169,7 +154,7 @@ const EditUserModal = (props) => {
                         : null }
                 </Form.Item>
 
-                <Button appearance="primary" htmlType="submit" isLoading={showLoading}>
+                <Button type="primary" htmlType="submit" className="text-white" style={{background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
                     Edit
                 </Button>
 

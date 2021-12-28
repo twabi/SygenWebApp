@@ -82,53 +82,51 @@ const Users = () => {
 
 
     useEffect(() => {
-        if(loggedInUser){
-            //console.log("logged in")
-            if(error){
-                alert(error.message);
-            }
 
-            if(users){
-                var tempArray = [];
-                users.map((user, index) => {
-                    tempArray.push({
-                        key: index + 1,
-                        name: user.firstname + " " + user.surname,
-                        phone: user.phone,
-                        email: user.email,
-                        userRole: user.role,
-                        created : moment(user.dateCreated, "YYYY-MM-DDTh:mm:ss").format("DD-MMM-YY"),
-                        dpt: user.department,
-                        action: <div>
-                            <Button intent="primary" onClick={() => {
-                                setEditUser(user);
-                                setViewModal(true);
-                            }}>
-                                <EyeOpenIcon color="blue700"/>
-                            </Button>
-                            <Button intent="danger" onClick={() => {
-                                // eslint-disable-next-line no-restricted-globals
-                                if (confirm("Are you sure you want to delete user?")) {
-                                    deleteUser(user.userID);
-                                }
-                            }}>
-                                <TrashIcon color="danger"/>
-                            </Button>
-                            <Button intent="edit" onClick={() => {
-                                setEditUser(user);
-                                setShowEditModal(true);
-                            }}>
-                                <EditIcon color="primary"/>
-                            </Button></div>
-                    });
-                });
-
-                setDataArray([...tempArray]);
-                setUserArray([...tempArray]);
-            }
-        } else {
-            //window.location.href = "/login";
+        if(error){
+            alert(error.message);
         }
+
+        if(users){
+            var tempArray = [];
+            users.map((user, index) => {
+                tempArray.push({
+                    key: index + 1,
+                    name: user.firstname + " " + user.surname,
+                    phone: user.phone,
+                    email: user.email,
+                    userRole: user.role,
+                    created : moment(user.dateCreated, "YYYY-MM-DDTh:mm:ss").format("DD-MMM-YY"),
+                    dpt: user.department,
+                    action: <div>
+                        <Button intent="primary" onClick={() => {
+                            setEditUser(user);
+                            setViewModal(true);
+                        }}>
+                            <EyeOpenIcon color="blue700"/>
+                        </Button>
+                        <Button intent="danger" onClick={() => {
+                            // eslint-disable-next-line no-restricted-globals
+                            if (confirm("Are you sure you want to delete user?")) {
+                                deleteUser(user.userID);
+                            }
+                        }}>
+                            <TrashIcon color="danger"/>
+                        </Button>
+                        <Button intent="edit" onClick={() => {
+                            setEditUser(user);
+                            setShowEditModal(true);
+                        }}>
+                            <EditIcon color="primary"/>
+                        </Button></div>
+                });
+            });
+
+            setDataArray([...tempArray]);
+            setUserArray([...tempArray]);
+        }
+
+
 
     }, [error, loggedInUser, users])
 
