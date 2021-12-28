@@ -3,7 +3,6 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
-//import Firebase from "../Firebase";
 import LogIn from "./Auth/LogIn";
 
 const Navigation = () => {

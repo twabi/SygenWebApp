@@ -5,23 +5,23 @@ import { MDBCard, MDBCardBody, MDBCol } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
-//import Firebase from "../../Firebase";
+import Firebase from '../Firebase';
 import { Input } from 'antd';
 import {LockOutlined, MailOutlined} from '@ant-design/icons';
+import {useSignInWithEmailAndPassword} from "react-firebase-hooks/auth";
 
 const LogIn = () => {
 
     const history = useHistory();
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
-   /* const [
+   const [
         signInWithEmailAndPassword,
         user,
         loading,
         error,
     ] = useSignInWithEmailAndPassword(Firebase.auth());
 
-    */
     const [showLoading, setShowLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -104,7 +104,7 @@ const LogIn = () => {
                             </MDBCardBody>
                             <MDBFooter>
                                 <div className="text-center text-black-50 d-flex justify-content-center mb-3">
-                                    forgot your password? <a onClick={handleForgot} href className="font-italic text-primary"> click here</a>
+                                    forgot your password? <i onClick={handleForgot} className="font-italic text-primary"> click here</i>
                                 </div>
                             </MDBFooter>
                         </MDBCard>
