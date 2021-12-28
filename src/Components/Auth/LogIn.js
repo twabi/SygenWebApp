@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { MDBRow, MDBFooter, MDBAlert, MDBBox} from "mdbreact";
 import { MDBCard, MDBCardBody, MDBCol } from 'mdbreact';
-//import logo from "../../logo.png";
+import logo from "../../sygenlogo.png";
 import 'mdbreact/dist/css/mdb.css';
 import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
@@ -9,6 +9,7 @@ import Firebase from '../Firebase';
 import { Input } from 'antd';
 import {LockOutlined, MailOutlined} from '@ant-design/icons';
 import {useSignInWithEmailAndPassword} from "react-firebase-hooks/auth";
+import sygenImage from "../../sygen-model.png";
 
 const LogIn = () => {
 
@@ -41,25 +42,23 @@ const LogIn = () => {
     }
 
     const handleForgot = () => {
-
+        history.push("/forgot");
     }
 
     return (
-        <div>
+        <div className="vh-100">
             <MDBBox>
                 <MDBRow>
                     <MDBCol>
-                        <img src='https://mdbcdn.b-cdn.net/img/new/slides/041.webp' className='img-fluid shadow-4' alt='...' />
+                        <img src={sygenImage} className='img-fluid shadow-4 vh-100' alt='...' />
                     </MDBCol>
-                    <MDBCol>
-                        <MDBCard  className="my-5 p-3">
+                    <MDBCol md="4" className="d-flex align-items-center justify-content-center">
+                        <MDBCard  className="m-2 p-3 mr-5 mt-5">
                             <MDBCardBody>
-                                <MDBRow className="mb-4">
+                                <MDBRow className="mb-5">
                                     <MDBCol>
-                                        {/*
-                                        <img src={logo} style={{width:"15rem", height:"10rem"}} className="rounded mx-auto d-block" alt="aligment" />
-                                        */}
-
+                                        <img src={logo}
+                                             style={{ height:"9rem"}} className="w-75 rounded mx-auto d-block" alt="aligment" />
                                     </MDBCol>
                                 </MDBRow>
                                 <form className="mt-4">
@@ -69,7 +68,7 @@ const LogIn = () => {
                                                type="email"
                                                placeholder="Your email address"
                                                className="my-3"
-                                               prefix={<MailOutlined style={{color:"#1890ff"}}/>}
+                                               prefix={<MailOutlined style={{color:"#000000"}}/>}
                                                onChange={handleEmail}
                                                value={email}
                                         />
@@ -77,9 +76,9 @@ const LogIn = () => {
                                             size="large"
                                             placeholder="Your password"
                                             value={password}
-                                            className="mt-2 mb-3"
+                                            className="mt-3 mb-3"
                                             onChange={handlePassword}
-                                            prefix={<LockOutlined style={{color:"#1890ff"}}/>}
+                                            prefix={<LockOutlined style={{color:"#000000"}}/>}
                                         />
 
                                     </div>
@@ -94,7 +93,7 @@ const LogIn = () => {
 
 
                                     <div className="text-center py-4 mt-3">
-                                        <Button className="w-100"  onClick={handleLogin} type="primary" shape="round" size="large">
+                                        <Button className="w-100"  onClick={handleLogin} type="primary" style={{backgroundColor:"#000000"}} shape="round" size="large">
                                             LOGIN {showLoading ? <div className="spinner-border mx-2 text-white spinner-border-sm" role="status">
                                             <span className="sr-only">Loading...</span>
                                         </div> : null}

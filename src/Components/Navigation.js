@@ -4,6 +4,7 @@ import {
     Route,
 } from "react-router-dom";
 import LogIn from "./Auth/LogIn";
+import ForgotPassword from "./Auth/ForgotPassword";
 
 const Navigation = () => {
 
@@ -17,6 +18,8 @@ const Navigation = () => {
                 <Route path="/login" render={(props) => (
                     <LogIn {...props} />)} exact />
 
+                <Route path="/forgot" render={(props) => (
+                    <ForgotPassword {...props} />)} exact />
 
 
             </Switch>
