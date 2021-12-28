@@ -1,10 +1,9 @@
 import React, {useState} from 'react'
-import {Card, Layout, Progress} from 'antd';
+import {Card, Layout} from 'antd';
 import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
-import {MDBBox, MDBCardHeader, MDBCol, MDBContainer, MDBRow} from "mdbreact";
-import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
-import { MDBBtn, MDBCard, MDBCardText } from 'mdbreact';
+import {MDBBox, MDBCol, MDBRow} from "mdbreact";
+import { MDBCard, MDBCardText } from 'mdbreact';
 import {Text} from "react-font";
 
 

@@ -3,11 +3,7 @@ import {
     MDBNavbar, MDBNavbarNav, MDBNavItem, MDBDropdown,
     MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon,
 } from "mdbreact";
-import {Position, SideSheet} from "evergreen-ui";
-import { useAuthState } from 'react-firebase-hooks/auth';
 import {Badge, Tooltip, Switch} from "antd";
-import {MessageOutlined} from "@ant-design/icons";
-import {useListVals} from "react-firebase-hooks/database";
 import holder from "../../holder.jpg";
 import Firebase from "../Firebase";
 
@@ -71,11 +67,6 @@ const NavBar = (props) => {
         <MDBNavbar color="white" light expand="xs">
             <MDBNavbarNav left>
                 <Switch checked={checked} style={{background: "#f06000"}} onChange={onChange} />
-                {/*<Switch
-                    height={21}
-                    checked={checked}
-                    onChange={e => handleChecked( e.target.checked )}
-                />*/}
             </MDBNavbarNav>
             <MDBNavbarNav right>
                 <MDBNavItem>

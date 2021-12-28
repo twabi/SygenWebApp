@@ -4,9 +4,7 @@ import {
     MDBCard,
     MDBCardBody,
     MDBCol,
-    MDBContainer,
     MDBFooter,
-    MDBInput,
     MDBRow
 } from "mdbreact";
 import logo from "../../sygenlogo.png";
@@ -14,7 +12,7 @@ import sygenImage from "../../sygen-model.png";
 import {Button, Input} from "antd";
 import {useHistory} from 'react-router-dom';
 import Firebase from "../Firebase";
-import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
+import {MailOutlined} from "@ant-design/icons";
 
 
 const ForgotPassword = () => {

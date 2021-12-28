@@ -3,7 +3,7 @@ import { Form, Input} from "antd";
 import {Button} from "evergreen-ui";
 import FireFetch from "../../FireFetch";
 import {MDBAlert} from "mdbreact";
-import Firebase from "../../../Firebase";
+import Firebase from "../../Firebase";
 
 
 var storageRef = Firebase.storage().ref("System/Outlets");

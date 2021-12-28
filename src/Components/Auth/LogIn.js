@@ -37,7 +37,7 @@ const LogIn = () => {
         setPassword(value);
     };
 
-    const handleLogin = () => {
+    const gotoHome = () => {
         history.push("/home");
     }
 
@@ -47,31 +47,7 @@ const LogIn = () => {
 
     useEffect(() => {
         if(user){
-            handleLogin();
-            /*
-            var userArray = [];
-            dbRef.on("child_added", function (snapshot) {
-                var oneUser = snapshot.val();
-                userArray.push(oneUser);
-
-                var thisUser = userArray[userArray.findIndex(x => x.email === email)];
-                console.log(thisUser);
-                if(thisUser !== undefined){
-                    var role = thisUser.role;
-                    if(role === "SalesRep"){
-                        setShowLoading(false);
-                        setShowAlert(true);
-                        setColor("danger");
-                        setErrorMessage("A salesrep cannot access this platform. Contact your Supervisor for more.");
-
-                    } else if(role === "Admin") {
-                        setShowLoading(false);
-                        gotoHome();
-                    }
-                }
-            });
-
-             */
+            gotoHome();
 
         }
 
@@ -86,6 +62,18 @@ const LogIn = () => {
             setShowLoading(true);
         }
     }, [error, loading, user])
+
+    const handleLogin = () => {
+
+        if((email == null || password == null) || (email === "" || password === "")) {
+            setErrorMessage("Fields cannot be left empty!");
+            setShowAlert(true);
+        } else {
+            setShowLoading(true);
+            signInWithEmailAndPassword(email, password);
+        }
+
+    }
 
     return (
         <div className="vh-100">
