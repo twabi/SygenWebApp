@@ -17,7 +17,6 @@ import Firebase from "../Firebase";
 import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
 
 
-
 const ForgotPassword = () => {
 
     const history = useHistory();
