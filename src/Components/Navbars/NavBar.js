@@ -68,7 +68,7 @@ const NavBar = (props) => {
 
         <MDBNavbar color="white" light expand="xs">
             <MDBNavbarNav left>
-                <Switch checked={checked} style={{background: "#000"}} onChange={onChange} />
+                <Switch checked={checked} style={{background: "#f06000"}} onChange={onChange} />
                 {/*<Switch
                     height={21}
                     checked={checked}
