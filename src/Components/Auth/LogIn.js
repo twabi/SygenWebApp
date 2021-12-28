@@ -29,16 +29,16 @@ const LogIn = () => {
     const [color, setColor] = useState("info");
 
 
-    const handleEmail = () => {
+    const handleEmail = ({target : {value}}) => {
+        setEmail(value);
+    };
 
-    }
-
-    const handlePassword = () => {
-
-    }
+    const handlePassword = ({target : {value}}) => {
+        setPassword(value);
+    };
 
     const handleLogin = () => {
-
+        history.push("/home");
     }
 
     const handleForgot = () => {

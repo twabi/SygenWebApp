@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import LogIn from "./Auth/LogIn";
 import ForgotPassword from "./Auth/ForgotPassword";
+import Home from "./Home";
 
 const Navigation = () => {
 
@@ -20,6 +21,9 @@ const Navigation = () => {
 
                 <Route path="/forgot" render={(props) => (
                     <ForgotPassword {...props} />)} exact />
+
+                <Route path="/home" render={(props) => (
+                    <Home {...props} />)} exact />
 
 
             </Switch>
