@@ -3,11 +3,12 @@ import {
     MDBNavbar, MDBNavbarNav, MDBNavItem, MDBDropdown,
     MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon,
 } from "mdbreact";
-import {Position, SideSheet, Switch} from "evergreen-ui";
+import {Position, SideSheet} from "evergreen-ui";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import {Badge, Tooltip} from "antd";
+import {Badge, Tooltip, Switch} from "antd";
 import {MessageOutlined} from "@ant-design/icons";
 import {useListVals} from "react-firebase-hooks/database";
+import holder from "../../holder.jpg";
 
 const NavBar = (props) => {
     const [checked, setChecked] = useState(true);
@@ -20,6 +21,10 @@ const NavBar = (props) => {
     const handleChecked = (check) => {
         setChecked(check);
         props.checkBack(check);
+    }
+    function onChange(checked) {
+        setChecked(checked);
+        props.checkBack(checked);
     }
 
     /*
@@ -63,26 +68,20 @@ const NavBar = (props) => {
 
         <MDBNavbar color="white" light expand="xs">
             <MDBNavbarNav left>
-                <Switch
+                <Switch checked={checked} style={{background: "#000"}} onChange={onChange} />
+                {/*<Switch
                     height={21}
                     checked={checked}
                     onChange={e => handleChecked( e.target.checked )}
-                />
+                />*/}
             </MDBNavbarNav>
             <MDBNavbarNav right>
-                <MDBNavItem className="d-flex align-items-center" onClick={()=>{setShowSide(true)}}>
-                    <Tooltip placement="bottom" title="view messages">
-                        <Badge count={messageArray.length}>
-                            <MessageOutlined style={{ fontSize: '160%', color : "#224461"}}/>
-                        </Badge>
-                    </Tooltip>
-                </MDBNavItem>
                 <MDBNavItem>
                     <MDBDropdown className="mx-2 mr-4">
                         <MDBDropdownToggle nav caret>
                             <div  className="d-inline" >
-                                <p className="d-inline mx-1">{userName}</p>
-                                {/*<img style={{width:"1.5rem", height:"1.5rem"}} src={holder} className="rounded mx-2 float-left d-inline" alt="aligment" />*/}
+                                <p className="d-inline mx-1">{"userName"}</p>
+                                {<img style={{width:"1.5rem", height:"1.5rem"}} src={holder} className="rounded mx-2 float-left d-inline" alt="aligment" />}
                             </div>
                         </MDBDropdownToggle>
                         <MDBDropdownMenu className="dropdown-default">

@@ -6,6 +6,8 @@ import {
 import LogIn from "./Auth/LogIn";
 import ForgotPassword from "./Auth/ForgotPassword";
 import Home from "./Home";
+import Users from "./Users";
+import Projects from "./Projects";
 
 const Navigation = () => {
 
@@ -25,6 +27,11 @@ const Navigation = () => {
                 <Route path="/home" render={(props) => (
                     <Home {...props} />)} exact />
 
+                <Route path="/users" render={(props) => (
+                    <Users {...props} />)} exact />
+
+                <Route path="/projects" render={(props) => (
+                    <Projects {...props} />)} exact />
 
             </Switch>
         </Fragment>
