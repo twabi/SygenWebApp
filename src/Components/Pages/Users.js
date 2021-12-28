@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
-import {Card, Layout, Table, Tooltip} from "antd";
+import {Button, Card, Layout, Table, Tooltip} from "antd";
 import {
     Dialog,
-    Button,
     SearchInput, EyeOpenIcon, TrashIcon, EditIcon, IconButton, DollarIcon,
 } from "evergreen-ui";
 import {
@@ -52,10 +51,6 @@ const Users = () => {
             title: 'User Role',
             dataIndex: 'userRole',
             key: 'userRole',
-        },{
-            title: 'Department',
-            dataIndex: 'dpt',
-            key: 'dpt',
         },{
             title: 'Created',
             dataIndex: 'created',
@@ -269,20 +264,20 @@ const Users = () => {
 
                                     <MDBRow>
                                         <MDBCol md={12} className="w-100">
-                                            <div className="text-left">
+                                            <div className="text-left mb-3">
                                                 <div className="d-block">
-                                                    <h5 className="font-weight-bold">
+                                                    <h3 className="font-weight-bold">
                                                         <Text family='Nunito'>
-                                                            Sales Reps
+                                                            Members
                                                         </Text>
-                                                    </h5>
+                                                    </h3>
                                                 </div>
                                             </div>
 
                                             <MDBRow className="ml-1">
                                                 <SearchInput height={40} placeholder="Search Sales Reps..." className="w-100"   onChange={e => handleSearch(e.target.value)} />
-                                                <Button height={40} appearance="primary" className="mx-2" onClick={() => {setShowModal(true)}}>
-                                                    New SalesRep
+                                                <Button size="large" type="primary" style={{background: "#f06000", borderColor: "#f06000"}} className="mx-2" onClick={() => {setShowModal(true)}}>
+                                                    New Member
                                                 </Button>
                                             </MDBRow>
                                         </MDBCol>

@@ -13,7 +13,6 @@ const regEx = /((?:\+|00)[17](?: |\-)?|(?:\+|00)[1-9]\d{0,2}(?: |\-)?|(?:\+|00)1
 const moment = require("moment");
 const CreateUserModal = (props) => {
 
-    const [DOB, setDOB] = useState(null);
     const [gender, setGender] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const [color, setColor] = useState("info");
@@ -23,9 +22,6 @@ const CreateUserModal = (props) => {
 
     function changeGender(option) {
         setGender(option);
-    }
-    function onChangeOne(date, dateString) {
-        setDOB(dateString);
     }
     function changeRole(option) {
         setRole(option);
@@ -53,7 +49,6 @@ const CreateUserModal = (props) => {
                 "email" : email,
                 "phone" : phone,
                 "gender" : gender,
-                "dob" : DOB,
                 "dateCreated" : timeStamp,
                 "department" : department,
                 "role" : role,
@@ -148,19 +143,6 @@ const CreateUserModal = (props) => {
                                ]}>
                         <Input type="phone" placeholder="Enter phone number" id="phone"/>
                     </Form.Item>
-                    <Form.Item
-                        label="Select Date of Birth"
-                        name="birth date"
-                        rules={[{ required: true,
-                            message: 'Please input Date of Birth!' }]}>
-                        <DatePicker
-                            placeholder="select starting date"
-                            picker={"date"}
-                            defaultValue={moment('1990-01-01', 'YYYY-MM-DD')}
-                            className="w-100"
-                            onChange={onChangeOne} />
-
-                    </Form.Item>
 
                     <Form.Item label="Gender"
                                name="Gender"
@@ -197,7 +179,7 @@ const CreateUserModal = (props) => {
                                     optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                                 }
                                 onChange={changeRole}>
-                            {["Admin", "SalesRep"].map((item, index) => (
+                            {["Task Master", "Web Master", "Developer", "Sales Manager", "Sales Assistant", "Chief Coder"].map((item, index) => (
                                 <Select.Option key={index}  value={item}>{item}</Select.Option>
                             ))}
 
