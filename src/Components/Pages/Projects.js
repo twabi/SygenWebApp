@@ -4,7 +4,7 @@ import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
 import {Text} from "react-font";
 import {
-    Button,
+    Dialog,
     EditIcon,
     EyeOpenIcon,
     SearchInput,
@@ -15,9 +15,10 @@ import {
     MDBCol, MDBListGroup, MDBListGroupItem,
     MDBRow
 } from "mdbreact";
-import {Alert} from 'antd';
+import {Button, Alert} from 'antd';
 import {useListVals} from "react-firebase-hooks/database";
 import Firebase from "../Firebase";
+import CreateProjectModal from "../Modals/Projects/CreateProjectModal";
 
 
 const { Content } = Layout;
@@ -30,6 +31,7 @@ const Projects = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [projects, loading, error] = useListVals(dbRef);
     const [dataArray, setDataArray] = useState([]);
+    const [createModal, setCreateModal] = useState(false);
     const [checkedData, setCheckedData] = useState(true);
     const callback = (data) => {
         setCheckedData(data);
@@ -52,25 +54,39 @@ const Projects = () => {
                         <MDBRow className="w-100">
                             <MDBCol md={12}>
 
+                                <Dialog
+                                    isShown={createModal}
+                                    title="Create New Project"
+                                    onCloseComplete={() => {setCreateModal(false)}}
+                                    shouldCloseOnOverlayClick={false}
+                                    hasFooter={false}>
+
+                                    <MDBCol md={12}>
+                                        <CreateProjectModal modal={setCreateModal}/>
+                                    </MDBCol>
+
+                                </Dialog>
+
                                 <Card className="w-100">
 
                                     <MDBRow>
                                         <MDBCol md={12} className="w-100">
-                                            <div className="text-left">
+                                            <div className="text-left mb-3">
                                                 <div className="d-block">
-                                                    <h5 className="font-weight-bold">
+                                                    <h3 className="font-weight-bold">
                                                         <Text family='Nunito'>
                                                             Projects
                                                         </Text>
-                                                    </h5>
+                                                    </h3>
                                                 </div>
                                             </div>
 
                                             <MDBRow className="ml-1">
-                                                <SearchInput height={40} placeholder="Search outlets using name or location" className="w-100"
+                                                <SearchInput height={40} placeholder="Search projects" className="w-100"
                                                              onChange={e => handleSearch(e.target.value)} />
-                                                <Button height={40} appearance="primary" className="mx-2" onClick={() => {}}>
-                                                    New Outlet
+                                                <Button size="large" type="primary" style={{background: "#f06000", borderColor: "#f06000"}}
+                                                        className="mx-2" onClick={() => {setCreateModal(true)}}>
+                                                    New Project
                                                 </Button>
                                             </MDBRow>
                                         </MDBCol>
