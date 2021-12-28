@@ -5,9 +5,10 @@ import {
 } from "react-router-dom";
 import LogIn from "./Auth/LogIn";
 import ForgotPassword from "./Auth/ForgotPassword";
-import Home from "./Home";
-import Users from "./Users";
-import Projects from "./Projects";
+import Home from "./Pages/Home";
+import Users from "./Pages/Users";
+import Projects from "./Pages/Projects";
+import Tasks from "./Pages/Tasks";
 
 const Navigation = () => {
 
@@ -33,6 +34,8 @@ const Navigation = () => {
                 <Route path="/projects" render={(props) => (
                     <Projects {...props} />)} exact />
 
+                <Route path="/tasks" render={(props) => (
+                    <Tasks {...props} />)} exact />
             </Switch>
         </Fragment>
     );

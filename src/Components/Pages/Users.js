@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Card, Layout, Progress} from 'antd';
-import NavBar from "./Navbars/NavBar";
-import SideBar from "./Navbars/SideBar";
+import NavBar from "../Navbars/NavBar";
+import SideBar from "../Navbars/SideBar";
 
 
 const { Content } = Layout;
