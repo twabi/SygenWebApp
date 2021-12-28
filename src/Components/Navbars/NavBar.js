@@ -9,6 +9,7 @@ import {Badge, Tooltip, Switch} from "antd";
 import {MessageOutlined} from "@ant-design/icons";
 import {useListVals} from "react-firebase-hooks/database";
 import holder from "../../holder.jpg";
+import Firebase from "../Firebase";
 
 const NavBar = (props) => {
     const [checked, setChecked] = useState(true);
@@ -50,6 +51,10 @@ const NavBar = (props) => {
 
     }, [checked, error, messages, user]);
 
+
+
+     */
+
     const handleLogout = () => {
         Firebase.auth().signOut()
             .then(() => {
@@ -61,9 +66,6 @@ const NavBar = (props) => {
             alert("oops an error occurred : " + err);
         });
     }
-
-     */
-
     return(
 
         <MDBNavbar color="white" light expand="xs">
@@ -86,7 +88,7 @@ const NavBar = (props) => {
                         </MDBDropdownToggle>
                         <MDBDropdownMenu className="dropdown-default">
                             <MDBDropdownItem href="#!">Settings</MDBDropdownItem>
-                            <MDBDropdownItem href="#!">Log Out</MDBDropdownItem>
+                            <MDBDropdownItem href="#!" onClick={handleLogout}>Log Out</MDBDropdownItem>
                         </MDBDropdownMenu>
                     </MDBDropdown>
                 </MDBNavItem>

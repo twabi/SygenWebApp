@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { MDBRow, MDBFooter, MDBAlert, MDBBox} from "mdbreact";
 import { MDBCard, MDBCardBody, MDBCol } from 'mdbreact';
 import logo from "../../sygenlogo.png";
@@ -44,6 +44,48 @@ const LogIn = () => {
     const handleForgot = () => {
         history.push("/forgot");
     }
+
+    useEffect(() => {
+        if(user){
+            handleLogin();
+            /*
+            var userArray = [];
+            dbRef.on("child_added", function (snapshot) {
+                var oneUser = snapshot.val();
+                userArray.push(oneUser);
+
+                var thisUser = userArray[userArray.findIndex(x => x.email === email)];
+                console.log(thisUser);
+                if(thisUser !== undefined){
+                    var role = thisUser.role;
+                    if(role === "SalesRep"){
+                        setShowLoading(false);
+                        setShowAlert(true);
+                        setColor("danger");
+                        setErrorMessage("A salesrep cannot access this platform. Contact your Supervisor for more.");
+
+                    } else if(role === "Admin") {
+                        setShowLoading(false);
+                        gotoHome();
+                    }
+                }
+            });
+
+             */
+
+        }
+
+        if(error){
+            setShowLoading(false);
+            setShowAlert(true);
+            setColor("danger");
+            setErrorMessage(error.message);
+        }
+
+        if(loading){
+            setShowLoading(true);
+        }
+    }, [error, loading, user])
 
     return (
         <div className="vh-100">
