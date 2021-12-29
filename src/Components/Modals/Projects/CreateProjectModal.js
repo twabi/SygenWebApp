@@ -8,7 +8,6 @@ import {useListVals} from "react-firebase-hooks/database";
 import FireFetch from "../../FireFetch";
 
 
-var storageRef = Firebase.storage().ref("System/Outlets");
 const userRef = Firebase.database().ref('System/Users');
 const moment = require("moment");
 

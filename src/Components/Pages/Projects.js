@@ -19,6 +19,8 @@ import {Alert} from 'antd';
 import {useListVals} from "react-firebase-hooks/database";
 import Firebase from "../Firebase";
 import CreateProjectModal from "../Modals/Projects/CreateProjectModal";
+import EditProjectModal from "../Modals/Projects/EditProjectModal";
+import FireFetch from "../FireFetch";
 
 
 const { Content } = Layout;
@@ -32,6 +34,8 @@ const Projects = () => {
     const [projects, loading, error] = useListVals(dbRef);
     const [dataArray, setDataArray] = useState([]);
     const [createModal, setCreateModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
+    const [editProject, setEditProject] = useState(null);
     const [checkedData, setCheckedData] = useState(true);
     const callback = (data) => {
         setCheckedData(data);
@@ -50,7 +54,32 @@ const Projects = () => {
             setColor("danger");
             setShowAlert(true);
         }
-    }, [projects, loading, error])
+    }, [projects, loading, error]);
+
+    const showEditModal = (project) => {
+        setEditProject(project);
+        setEditModal(true);
+    }
+
+    const deleteProject = (projectID) => {
+        const output = FireFetch.DeleteFromDB("Projects", projectID);
+        output.then((result) => {
+            console.log(result);
+            if(result === "success"){
+                setMessage("Project deleted successfully");
+                setColor("success");
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 3000);
+            }
+        })
+            .catch((error) => {
+                setMessage("Unable to delete Project occurred :: " + error.message);
+                setColor("danger");
+                setShowAlert(true);
+            })
+    }
 
     return (
         <>
@@ -75,6 +104,18 @@ const Projects = () => {
 
                                     <MDBCol md={12}>
                                         <CreateProjectModal modal={setCreateModal}/>
+                                    </MDBCol>
+                                </Dialog>
+
+                                <Dialog
+                                    isShown={editModal}
+                                    title="Edit Project"
+                                    onCloseComplete={() => {setEditModal(false)}}
+                                    shouldCloseOnOverlayClick={false}
+                                    hasFooter={false}>
+
+                                    <MDBCol md={12}>
+                                        <EditProjectModal editProject={editProject} modal={setEditModal}/>
                                     </MDBCol>
 
                                 </Dialog>
@@ -166,12 +207,15 @@ const Projects = () => {
                                                                                         <EyeOpenIcon/>
                                                                                     </Button>
                                                                                     <Button type="primary" className="my-1" onClick={() => {
-
+                                                                                        showEditModal(project);
                                                                                     }}>
                                                                                         <EditIcon color="info"/>
                                                                                     </Button>
                                                                                     <Button className="my-1" type="danger" onClick={() => {
                                                                                         // eslint-disable-next-line no-restricted-globals
+                                                                                        if (confirm("Are you sure you want to delete outlet?")) {
+                                                                                            deleteProject(project.projectID);
+                                                                                        }
 
                                                                                     }}>
                                                                                         <TrashIcon color="danger"/>

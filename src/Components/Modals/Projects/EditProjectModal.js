@@ -1,66 +1,78 @@
 import React, {useEffect, useState} from "react";
-import { Form, Input} from "antd";
+import {DatePicker, Form, Input, Select} from "antd";
 import {Button} from "evergreen-ui";
 import FireFetch from "../../FireFetch";
 import {MDBAlert} from "mdbreact";
 import Firebase from "../../Firebase";
+import {useListVals} from "react-firebase-hooks/database";
 
 
-var storageRef = Firebase.storage().ref("System/Outlets");
+const userRef = Firebase.database().ref('System/Users');
+const moment = require("moment");
 const EditProjectModal = (props) => {
 
+    const [users] = useListVals(userRef);
     const [showAlert, setShowAlert] = useState(false);
     const [color, setColor] = useState("info");
     const [message, setMessage] = useState("");
     const [showLoading, setShowLoading] = useState(false);
     const [filesList, setFilesList] = useState([]);
-    const [selectedOutlet, setSelectedOutlet] = useState(props.editOutlet);
+    const [selectedProject, setSelectedProject] = useState(props.editProject);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [type, setType] = useState(null);
+    const [paymentType, setPaymentType] = useState(null);
+    const [status, setStatus] = useState(null);
+    const [membersAssigned, setMembersAssigned] = useState([]);
 
-
-    const handleFileUpload = (e) => {
-        var tempArray = Object.values(e.target.files);
-        setFilesList(tempArray)
+    function onChangeOne(date, dateString) {
+        setStartDate(dateString);
+    }
+    function changeAssigned(assigned) {
+        setMembersAssigned(assigned);
     }
 
+    function onChangeTwo(date, dateString) {
+        setEndDate(dateString);
+    }
+    function changeType(type) {
+        setType(type);
+    }
+    function changeStatus(status) {
+        setStatus(status);
+    }
+
+    function changePaymentType(type){
+        setPaymentType(type);
+    }
+
+    
     useEffect(() => {
-        setSelectedOutlet(props.editOutlet);
+        setSelectedProject(props.editProject);
     }, [props])
 
 
-    const editOutlet = () => {
-        //setShowLoading(true);
+    const editProject = (result) => {
+        console.log(result);
+        setShowLoading(true);
+        var projectID = selectedProject.projectID;
 
-        var name = document.getElementById("outletName").value;
-        var location = document.getElementById("location").value;
-        var contactName = document.getElementById("contactName").value;
-        var contactEmail = document.getElementById("contactEmail").value
-        var contactPhone = document.getElementById("contactPhone").value;
-        var notes = document.getElementById("feedback").value;
-        var outletID = selectedOutlet.outletID;
-        var longitude = document.getElementById("long").value
-        var latitude = document.getElementById("lat").value
 
         var object = {
-            "name" : name,
-            "location" : location,
-            "contactPerson" : {
-                "email" : contactEmail,
-                "name" : contactName,
-                "phone" : contactPhone
-            },
-            "coordinates" : {
-                "longitude" : longitude,
-                "latitude" : latitude
-            },
-            "feedbackNotes" : notes,
+            "name" : result.name,
+            "description" : result.description,
+            "startDate" : moment(result.startDate).format("YYYY-MM-DD") ? moment(result.startDate).format("YYYY-MM-DD") : null,
+            "endDate" : moment(result.endDate).format("YYYY-MM-DD"),
+            "type" : result.type,
+            "paymentType" : result.paymentType ? result.paymentType : "",
+            "amount" : result.amount ? result.amount : "",
+            "status" : result.status,
+            "members" : result.members
         };
 
+        console.log(object);
 
-        var startIndex = selectedOutlet.urls.length;
-        var endIndex = startIndex + filesList.length;
-
-
-        const output = FireFetch.updateInDB("Outlets", outletID, object);
+        const output = FireFetch.updateInDB("Projects", projectID, object);
         output.then((result) => {
             console.log(result);
             if(result === "success"){
@@ -73,15 +85,6 @@ const EditProjectModal = (props) => {
                     props.modal(false);
                 }, 2100);
 
-                for(var i = startIndex; i < endIndex; i++){
-                    var actualIndex = endIndex - i;
-                    console.log(actualIndex-1)
-
-                    storageRef.child(outletID).child(""+i).put(filesList[actualIndex-1]).then(function(snapshot) {
-                        console.log('Uploaded a blob or file!');
-                    });
-                }
-
             }
         }).catch((error) => {
             setMessage("Unable to edit outlet, an error occurred :: " + error);
@@ -90,6 +93,8 @@ const EditProjectModal = (props) => {
             setShowLoading(false);
         })
 
+
+
     }
 
 
@@ -97,44 +102,152 @@ const EditProjectModal = (props) => {
         <div>
             <Form
                 layout="vertical"
-                onFinish={editOutlet}
+                onFinish={editProject}
+                fields={[
+                    {name: ["name"], value: selectedProject.name},
+                    {name: ["description"], value: selectedProject.description},
+                    {name: ["startDate"], value: !selectedProject.startDate ? undefined : moment(selectedProject.startDate, "YYYY-MM-DD")},
+                    {name: ["endDate"], value: !selectedProject.endDate ? undefined : moment(selectedProject.startDate, "YYYY-MM-DD")},
+                    {name: ["type"], value: selectedProject.type},
+                    {name: ["paymentType"], value: selectedProject.paymentType},
+                    {name: ["amount"], value: selectedProject.amount},
+                    {name: ["status"], value: selectedProject.status},
+                    {name: ["members"], value: selectedProject.members},
+                ]}
             >
-
-                <Form.Item label="Outlet name">
-                    <Input placeholder="enter outlet name" defaultValue={selectedOutlet.name} id="outletName"/>
+                <Form.Item label="Project name"
+                           name="name"
+                           rules={[{ required: true, message: 'Please input outlet name!' }]}>
+                    <Input placeholder="enter outlet name" //defaultValue={selectedProject.name}
+                           id="name"/>
                 </Form.Item>
-                <Form.Item label="Location (District, Area)">
-                    <Input placeholder="enter outlet location e.g. (District, Area)" defaultValue={selectedOutlet.location} id="location"/>
-                </Form.Item>
-                <Form.Item label="Latitude" name="latitude">
-                    <Input type="number" placeholder="enter latitude" defaultValue={selectedOutlet.coordinates.latitude} id="lat"/>
-                </Form.Item>
-                <Form.Item label="Longitude" name="longitude">
-                    <Input type="number" placeholder="enter longitude" defaultValue={selectedOutlet.coordinates.longitude} id="long"/>
-                </Form.Item>
-
-                <Form.Item label="Outlet Contact Person Name">
-                    <Input type="text" defaultValue={selectedOutlet.contactPerson.name} placeholder="enter outlet contact person name" id="contactName"/>
+                <Form.Item label="Project Description"
+                           name="description"
+                           rules={[]}>
+                    <Input placeholder="enter project description" //defaultValue={selectedProject.description}
+                           id="desc"/>
                 </Form.Item>
 
-                <Form.Item label="Outlet Contact Phone">
-                    <Input type="phone" defaultValue={selectedOutlet.contactPerson.phone} placeholder="enter user phone number" id="contactPhone"/>
-                </Form.Item>
-                <Form.Item label="Outlet Contact Email">
-                    <Input type="text" defaultValue={selectedOutlet.contactPerson.email} placeholder="enter contact email address" id="contactEmail"/>
+
+                <Form.Item
+                    label="Select Project Start Date"
+                    name="startDate"
+                    rules={[{ required: true,
+                        message: 'Please input project start date!' }]}>
+                    <DatePicker
+                        placeholder="select starting date"
+                        picker={"date"}
+                        //defaultValue={!selectedProject.startDate ? undefined : moment(selectedProject.startDate, "YYYY-MM-DD")}
+                        className="w-100"
+                        onChange={onChangeOne} />
+
                 </Form.Item>
 
-                <Form.Item label="Feedback Notes">
-                    <Input type="text" defaultValue={selectedOutlet.feedbackNotes} placeholder="enter outlet notes" id="feedback"/>
+                <Form.Item
+                    label="Select Project End Date"
+                    name="endDate"
+                    rules={[]}>
+                    <DatePicker
+                        placeholder="select ending date"
+                        picker={"date"}
+                        //defaultValue={!selectedProject.endDate ? undefined : moment(selectedProject.startDate, "YYYY-MM-DD")}
+                        className="w-100"
+                        onChange={onChangeTwo} />
+
                 </Form.Item>
 
-                <Form.Item label="Upload Outlet Images">
-                    <Input type="file"
-                           multiple
-                           style={{ width: "100%" }}
-                           accept="image/*"
-                           onChange={handleFileUpload}
-                           placeholder="outlet image" id="outletImage"/>
+                <Form.Item label="Project Type"
+                           name="type"
+                           rules={[{ required: true,
+                               message: 'Please input project type!' }]}>
+                    <Select placeholder="Select project type"
+                            showSearch
+                            //defaultValue={selectedProject.type}
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            filterSort={(optionA, optionB) =>
+                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                            }
+                            onChange={changeType}>
+                        {["Internal", "Commercial", "R&D"].map((item, index) => (
+                            <Select.Option key={index}  value={item}>{item}</Select.Option>
+                        ))}
+
+                    </Select>
+                </Form.Item>
+
+                <Form.Item label="Payment Type"
+                           name="paymentType">
+                    <Select placeholder="Select payment type"
+                            showSearch
+                            //defaultValue={selectedProject.paymentType}
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            filterSort={(optionA, optionB) =>
+                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                            }
+                            onChange={changePaymentType}>
+                        {["Subscription", "Once-off Payment", "On-Credit"].map((item, index) => (
+                            <Select.Option key={index}  value={item}>{item}</Select.Option>
+                        ))}
+
+                    </Select>
+                </Form.Item>
+
+                <Form.Item label="Enter Payment amount (If applicable)"
+                           name="amount"
+                           rules={[]}>
+                    <Input type="number" placeholder="enter payment amount" //defaultValue={selectedProject.amount}
+                           id="amount"/>
+
+                </Form.Item>
+
+                <Form.Item label="Project Status"
+                           name="status"
+                           rules={[{ required: true,
+                               message: 'Please input project status!' }]}>
+                    <Select placeholder="Select project status"
+                            showSearch
+                            //defaultValue={selectedProject.status}
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            filterSort={(optionA, optionB) =>
+                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                            }
+                            onChange={changeStatus}>
+                        {["Ongoing", "Completed", "To Do"].map((item, index) => (
+                            <Select.Option key={index}  value={item}>{item}</Select.Option>
+                        ))}
+
+                    </Select>
+                </Form.Item>
+
+                <Form.Item label="Select Members assigned to the project"
+                           name="members"
+                           rules={[{ required: true, message: 'Please select members assigned to the project!' }]}>
+                    <Select placeholder="Select members to be assigned"
+                            showSearch
+                            //value={selectedProject.members}
+                            mode="multiple"
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            filterSort={(optionA, optionB) =>
+                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                            }
+                            onChange={changeAssigned}>
+                        {users.sort().map((item, index) => (
+                            <Select.Option key={index} value={item.userID}>{item.firstname + " " + item.surname}</Select.Option>
+                        ))}
+
+                    </Select>
                 </Form.Item>
 
                 {showAlert?
@@ -145,7 +258,8 @@ const EditProjectModal = (props) => {
                     </>
                     : null }
 
-                <Button type="primary" htmlType="submit" className="text-white" style={{background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
+                <Button type="primary" htmlType="submit" className="text-white" style={{background: "#f06000", borderColor: "#f06000"}} 
+                        isLoading={showLoading}>
                     Edit
                 </Button>
 
