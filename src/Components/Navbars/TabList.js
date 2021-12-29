@@ -23,13 +23,14 @@ const TabList = (props) => {
     }
 
     const handleClick = e => {
-        console.log('click ', e);
         if(e.key === '/users'){
             handleRoutes("/users");
         } else if(e.key === '/home'){
             handleRoutes("/home");
         } else if(e.key === '/projects'){
             handleRoutes("/projects");
+        } else if(e.key === '/tasks'){
+            handleRoutes("/tasks");
         }
     };
 

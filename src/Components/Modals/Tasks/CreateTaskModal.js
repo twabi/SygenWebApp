@@ -194,7 +194,7 @@ const CreateTaskModal = (props) => {
                            rules={[{ required: true, message: 'Please select the assigned dev!' }]}>
                     <Select placeholder="Select assigned user"
                             showSearch
-                            multiple={true}
+                            mode="multiple"
                             optionFilterProp="children"
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -253,7 +253,8 @@ const CreateTaskModal = (props) => {
                     </>
                     : null }
 
-                <Button appearance="primary" htmlType="submit" isLoading={showLoading}>
+                <Button appearance="primary" htmlType="submit" className="text-white"
+                        style={{color: "#fff", background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
                     Create
                 </Button>
 

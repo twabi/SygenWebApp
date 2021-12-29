@@ -37,21 +37,15 @@ const Tasks = () => {
             title: 'Key',
             dataIndex: 'key',
             key: 'key',
+        },{
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
         },
         {
             title: 'Task Type',
             dataIndex: 'type',
             key: 'type',
-        },
-        {
-            title: 'Location',
-            dataIndex: 'location',
-            key: 'location',
-        },
-        {
-            title: 'Assigned To',
-            dataIndex: 'assigned',
-            key: 'assigned',
         },
         {
             title: 'Status',
@@ -62,6 +56,11 @@ const Tasks = () => {
             title: 'Deadline',
             dataIndex: 'deadline',
             key: 'deadline',
+        },
+        {
+            title: 'Date assigned',
+            dataIndex: 'date',
+            key: 'date',
         },
         {
             title: 'Action',
@@ -98,58 +97,20 @@ const Tasks = () => {
                 var tempArray = [];
                 tasks.map((task, index) => {
 
-                    if(task.taskStatus === "Complete" && task.taskType === "Brand Coverage"){
-                        var urlArray = []
-                        storageRef.child(task.taskID).listAll()
-                            .then((res) => {
-                                res.items.forEach((itemRef) => {
-                                    // All the items under listRef.
-                                    itemRef.getDownloadURL().then((url) => {
-                                        urlArray.push(url);
-                                    })
-                                });
-                            }).catch((error) => {
-                            // Uh-oh, an error occurred!
-                        });
-                        task.urls = urlArray;
-                    }
-
-                    var payload = {
-                        "uid": task.createdByID
-                    }
-                    var url = "https://us-central1-sales265-d18df.cloudfunctions.net/getUserDetails";
-                    fetch(url,
-                        {
-                            method : 'POST',
-                            body : JSON.stringify(payload),
-                            headers: {
-                                'Content-type': 'application/json',
-                            },
-                        })
-                        .then(response => response.json())
-                        .then((result) => {
-                            task.createdByID = result.email;
-                        })
-                        .catch((error) => {
-                            console.log('error', error)
-                        });
 
                     var now = moment();
                     var deadline = moment(task.deadline, "YYYY-MM-DDTh:mm").format("DD MMM YYYY");
+                    var dateAssigned = moment(task.dateCreated, "YYYY-MM-DDTh:mm").format("DD MMM YYYY");
 
                     tempArray.push({
                         key: index + 1,
+                        title: task.title,
                         type: task.taskType,
                         status: <Badge color={task.taskStatus === "Complete" ? "green" : "neutral"}>{task.taskStatus}</Badge>,
-                        assigned: users[users.findIndex(x => (x.userID) === task.assignedUser)]&&
-                            users[users.findIndex(x => (x.userID) === task.assignedUser)].firstname + " " +
-                            users[users.findIndex(x => (x.userID) === task.assignedUser)].surname,
                         deadline : <Badge color={now.isBefore(deadline) ? "green" : "neutral"}>{deadline}</Badge>,
-                        location: task.taskType === "Brand Coverage" ? task.location :
-                            outlets[outlets.findIndex(x => (x.outletID) === task.assignedOutlet)]&&
-                            outlets[outlets.findIndex(x => (x.outletID) === task.assignedOutlet)].name,
+                        date : dateAssigned,
                         action: <div>
-                            <Button intent="primary" onClick={() => {
+                            <Button appearance="default" onClick={() => {
                                 setSelectedTask(task);
                                 setViewModal(true);
                             }}>
@@ -183,11 +144,10 @@ const Tasks = () => {
 
 
     const handleSearch = searchText => {
-        const filteredEvents = taskArray.filter(({ assigned, type, location }) => {
-            assigned = assigned.toLowerCase();
+        const filteredEvents = taskArray.filter(({ title, type, location }) => {
+            title = title.toLowerCase();
             type = type.toLowerCase();
-            location = location.toLowerCase();
-            return assigned.includes(searchText) || type.includes(searchText) || location.includes(searchText);
+            return title.includes(searchText) || type.includes(searchText);
         });
 
         setDataArray(filteredEvents);
@@ -283,20 +243,25 @@ const Tasks = () => {
 
                                     <MDBRow>
                                         <MDBCol md={12} className="w-100">
-                                            <div className="text-left">
+                                            <div className="text-left mb-3">
                                                 <div className="d-block">
-                                                    <h5 className="font-weight-bold">
+                                                    <h3 className="font-weight-bold">
                                                         <Text family='Nunito'>
                                                             Tasks
                                                         </Text>
-                                                    </h5>
+                                                    </h3>
                                                 </div>
                                             </div>
 
                                             <div className="ml-1 d-flex flex-row align-items-center w-100">
                                                 <SearchInput height={40} placeholder="Search tasks(type, location, user)" className="w-100"   onChange={e => handleSearch(e.target.value)} />
+                                                <Button height={40} appearance="primary"
+                                                        style={{background: "#f06000", borderColor: "#f06000", color: "#fff"}}
+                                                        className="mx-2" onClick={() => {setShowModal(true)}}>
+                                                    New Task
+                                                </Button>
                                                 <MDBDropdown>
-                                                    <MDBDropdownToggle caret color="primary">
+                                                    <MDBDropdownToggle caret color="white" >
                                                         {filter}
                                                     </MDBDropdownToggle>
                                                     <MDBDropdownMenu>
@@ -307,9 +272,7 @@ const Tasks = () => {
                                                 </MDBDropdown>
 
 
-                                                <MDBBtn  color="indigo" className="ml-1 text-white" onClick={() => {setShowModal(true)}}>
-                                                    New Task
-                                                </MDBBtn>
+
                                             </div>
                                         </MDBCol>
 
