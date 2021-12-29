@@ -126,7 +126,7 @@ const Projects = () => {
                                                             <MDBListGroup>
                                                                 {loading ?
                                                                     <div className="d-flex justify-content-center">
-                                                                        <div className="spinner-border mx-4 my-4 indigo-text spinner-border" role="status">
+                                                                        <div className="spinner-border mx-4 my-4 deep-orange-text spinner-border" role="status">
                                                                             <span className="sr-only">Loading...</span>
                                                                         </div>
                                                                     </div> : null}
@@ -160,7 +160,7 @@ const Projects = () => {
                                                                                        style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
                                                                             </MDBCol>
                                                                             <MDBCol md={2}>
-                                                                                <div className="d-flex flex-column mt-2">
+                                                                                <div className="d-flex flex-column w-50 mt-2">
                                                                                     <Button className="my-1" type="danger" onClick={() => {
                                                                                     }}>
                                                                                         <EyeOpenIcon/>

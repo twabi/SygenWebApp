@@ -1,19 +1,20 @@
 import React, {useState} from "react";
 import {
     MDBNavbar, MDBNavbarNav, MDBNavItem, MDBDropdown,
-    MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon,
+    MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem,
 } from "mdbreact";
-import {Badge, Tooltip, Switch} from "antd";
+import {Switch} from "antd";
 import holder from "../../holder.jpg";
 import Firebase from "../Firebase";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {useListVals} from "react-firebase-hooks/database";
 
+const dbRef = Firebase.database().ref('System/Users');
 const NavBar = (props) => {
     const [checked, setChecked] = useState(true);
     const [userName, setUserName] = useState(null);
-    //const [user, error] = useAuthState(Firebase.auth());
-    const [showSide, setShowSide] = useState(false);
-    //const [messages] = useListVals(messageRef);
-    const [messageArray, setMessageArray] = useState([]);
+    const [user, error] = useAuthState(Firebase.auth());
+    const [users] = useListVals(dbRef);
 
     const handleChecked = (check) => {
         setChecked(check);
@@ -24,32 +25,27 @@ const NavBar = (props) => {
         props.checkBack(checked);
     }
 
-    /*
     React.useEffect(() => {
-        localStorage.setItem("checked", checked);
-        
-        if(user){
-            setUserName(user.email);
 
-            if(messages){
-                setMessageArray(messages.filter(x => ((x.status === "unread" && x.receiver === user.uid))))
+        if(user){
+            if(users){
+                var title = users[users.findIndex(x => (x.email) === user.email)]&&users[users.findIndex(x => (x.email) === user.email)].role;
+                setUserName(title);
             }
+            //setUserName(user.email);
         }
         
         if(error){
-            console.log(error);
+            console.log(error.message);
             //window.location.href = "/login";
-            window.location.href = "/";
-            window.location.hash="no-back-button";
-            window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
-            window.onhashchange=function(){window.location.hash="no-back-button";}
+            //window.location.href = "/";
+            //window.location.hash="no-back-button";
+            //window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
+            //window.onhashchange=function(){window.location.hash="no-back-button";}
         }
 
-    }, [checked, error, messages, user]);
+    }, [checked, error, user, users]);
 
-
-
-     */
 
     const handleLogout = () => {
         Firebase.auth().signOut()
@@ -73,7 +69,7 @@ const NavBar = (props) => {
                     <MDBDropdown className="mx-2 mr-4">
                         <MDBDropdownToggle nav caret>
                             <div  className="d-inline" >
-                                <p className="d-inline mx-1">{"userName"}</p>
+                                <p className="d-inline mx-1">{userName}</p>
                                 {<img style={{width:"1.5rem", height:"1.5rem"}} src={holder} className="rounded mx-2 float-left d-inline" alt="aligment" />}
                             </div>
                         </MDBDropdownToggle>

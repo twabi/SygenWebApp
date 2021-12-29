@@ -51,7 +51,6 @@ const CreateProjectModal = (props) => {
     }
 
     function changeAssigned(assigned) {
-        console.log(assigned);
         setMembersAssigned(assigned);
     }
 
@@ -65,7 +64,6 @@ const CreateProjectModal = (props) => {
 
 
     const addProject = (result) => {
-        console.log(result);
 
         setShowLoading(true);
 
@@ -81,19 +79,17 @@ const CreateProjectModal = (props) => {
             var object = {
                 "name" : result.name,
                 "description" : result.description,
-                "startDate" : moment(result.startDate).format("YYYY-MM-DD"),
+                "startDate" : moment(result.startDate).format("YYYY-MM-DD") ? moment(result.startDate).format("YYYY-MM-DD") : null,
                 "endDate" : moment(result.endDate).format("YYYY-MM-DD"),
                 "type" : result.type,
-                "paymentType" : result.paymentType,
-                "amount" : result.amount,
+                "paymentType" : result.paymentType ? result.paymentType : "",
+                "amount" : result.amount ? result.amount : "",
                 "status" : result.status,
                 "dateCreated" : timeStamp,
                 "createdByID" : createdByID,
                 "projectID" : projectID,
                 "members" : result.assigned
             };
-
-            console.log(object);
 
             const output = FireFetch.SaveTODB("Projects", projectID, object);
             output.then((result) => {
