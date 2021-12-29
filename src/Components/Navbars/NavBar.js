@@ -4,10 +4,11 @@ import {
     MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem,
 } from "mdbreact";
 import {Avatar, Switch} from "antd";
-import holder from "../../holder.jpg";
 import Firebase from "../Firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useListVals} from "react-firebase-hooks/database";
+import {Dialog} from "evergreen-ui";
+import ChangePassword from "../Modals/Settings/ChangePassword";
 
 const dbRef = Firebase.database().ref('System/Users');
 const NavBar = (props) => {
@@ -15,6 +16,7 @@ const NavBar = (props) => {
     const [userName, setUserName] = useState(null);
     const [user, error] = useAuthState(Firebase.auth());
     const [users] = useListVals(dbRef);
+    const [modal, setModal] = useState(false);
 
     const handleChecked = (check) => {
         setChecked(check);
@@ -23,6 +25,10 @@ const NavBar = (props) => {
     function onChange(checked) {
         setChecked(checked);
         props.checkBack(checked);
+    }
+
+    const toggleModal = () => {
+        setModal(!modal);
     }
 
     React.useEffect(() => {
@@ -61,6 +67,10 @@ const NavBar = (props) => {
     return(
 
         <MDBNavbar color="white" light expand="xs">
+            <Dialog isShown={modal} hasFooter={false} title={"Change Account Email"} onCloseComplete={toggleModal}>
+                <ChangePassword modal={toggleModal}/>
+            </Dialog>
+
             <MDBNavbarNav left>
                 <Switch checked={checked} style={{background: "#f06000"}} onChange={onChange} />
             </MDBNavbarNav>
@@ -77,7 +87,7 @@ const NavBar = (props) => {
                             </div>
                         </MDBDropdownToggle>
                         <MDBDropdownMenu className="dropdown-default">
-                            <MDBDropdownItem href="#!">Change Password</MDBDropdownItem>
+                            <MDBDropdownItem href="#!" onClick={() => {toggleModal()}}>Change Password</MDBDropdownItem>
                             <MDBDropdownItem href="#!" onClick={handleLogout}>Log Out</MDBDropdownItem>
                         </MDBDropdownMenu>
                     </MDBDropdown>

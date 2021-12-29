@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
-import Firebase from "../../../Firebase";
+import Firebase from "../../Firebase";
 import {
     MDBCol, MDBRow, MDBModalBody, MDBBox, MDBCardFooter, MDBAlert
 } from "mdbreact";
 import {Button, Dialog, Text} from "evergreen-ui";
 import {Input} from "antd";
-import { MDBCard, MDBCardBody} from "mdbreact";
 
 
 const PasswordModal = (props) => {
@@ -131,7 +130,8 @@ const PasswordModal = (props) => {
                                 </div>
 
                             </div>
-                            <Button appearance="primary" isLoading={loading} className="mt-3" onClick={() => {
+                            <Button appearance="primary" htmlType="submit" className=" mt-3 text-white"
+                                    style={{color: "#fff", background: "#f06000", borderColor: "#f06000"}} isLoading={loading} onClick={() => {
                                 handlePasswordChange();
                             }}>Update Password</Button>
 

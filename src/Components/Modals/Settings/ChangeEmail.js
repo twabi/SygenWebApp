@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {MDBAlert} from "mdbreact";
-import Firebase from "../../../Firebase";
+import Firebase from "../../Firebase";
 import {
     MDBCol, MDBRow, MDBModalBody,
 } from "mdbreact";
@@ -109,7 +109,9 @@ const EmailModal = (props) => {
                                 </div>
 
                             </div>
-                            <Button appearance="primary" isLoading={loading} className="mt-3" onClick={() => {
+                            <Button appearance="primary" htmlType="submit" className=" mt-3 text-white"
+                                    style={{color: "#fff", background: "#f06000", borderColor: "#f06000"}} isLoading={loading}
+                                    onClick={() => {
                                 handleEmailChange();
                             }}>Update Email</Button>
 
