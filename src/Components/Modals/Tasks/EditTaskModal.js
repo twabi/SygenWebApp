@@ -1,0 +1,276 @@
+import React, {useEffect, useState} from "react";
+import {DatePicker, Form, Input, Select} from "antd";
+import {Button} from "evergreen-ui";
+import FireFetch from "../../FireFetch";
+import {MDBAlert} from "mdbreact";
+import Firebase from "../../Firebase";
+import {useListVals} from "react-firebase-hooks/database";
+
+
+const dbRef = Firebase.database().ref('System/Users');
+const projectRef = Firebase.database().ref('System/Projects');
+const moment = require("moment");
+const {TextArea} = Input;
+const EditTaskModal = (props) => {
+
+    const [users] = useListVals(dbRef);
+    const [showAlert, setShowAlert] = useState(false);
+    const [color, setColor] = useState("info");
+    const [message, setMessage] = useState("");
+    const [showLoading, setShowLoading] = useState(false);
+    const [type, setType] = useState(null);
+    const [status, setStatus] = useState(null);
+    const [showBrand, setShowBrand] = useState(false);
+    const [deadline, setDeadline] = useState(null);
+    const [projects] = useListVals(projectRef);
+    const [title, setTitle] = useState(null);
+    const [desc, setDesc] = useState(null);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedTask, setSelectedTask] = useState(props.selectedTask);
+    const [selectedProject, setSelectedProject] = useState(null);
+
+
+    function changeStatus (selectedOption) {
+        setStatus(selectedOption);
+    }
+
+    function changeProject (selectedOption) {
+        setSelectedProject(selectedOption);
+    }
+
+    function changeUser (selectedOption) {
+        setSelectedUser(selectedOption);
+    }
+
+    function changeType (selectedOption) {
+        setType(selectedOption);
+        if(selectedOption === "Brand Coverage"){
+            setShowBrand(true);
+        } else {
+            setShowBrand(false);
+        }
+    }
+
+    function changeDate(date, dateString) {
+        setDeadline(dateString);
+    }
+
+    useEffect(() => {
+
+        setSelectedTask(props.selectedTask);
+        setSelectedUser(props.selectedTask.assignedTo);
+        setSelectedProject(props.selectedTask.projectID);
+        setStatus(props.selectedTask.taskStatus);
+        props.selectedTask.title ? setTitle(props.selectedTask.title) : setTitle("");
+        props.selectedTask.description ? setDesc(props.selectedTask.description) : setDesc("");
+        setType(props.selectedTask.taskType);
+        setDeadline(props.selectedTask.deadline);
+
+    }, [props, showBrand])
+
+
+
+    const editTask = (values) => {
+        setShowLoading(true);
+
+        var date = values.deadline;
+        console.log(date.format("YYYY-MM-DDTh:mm"));
+
+        var object = {
+            title : values.title,
+            description : values.description,
+            deadline : date.format("YYYY-MM-DDTh:mm"),
+            assignedTo : values.assigned,
+            projectID : values.project,
+            taskStatus : values.status,
+            taskType : values.type
+        }
+
+
+        console.log(object);
+
+
+        const output = FireFetch.updateInDB("Tasks", selectedTask.taskID, object);
+        output.then((result) => {
+            console.log(result);
+            if(result === "success"){
+                setMessage("Task edited successfully");
+                setColor("success");
+                setShowAlert(true);
+                setShowLoading(false);
+                setTimeout(() => {
+                    setShowAlert(false);
+                    props.modal(false);
+                }, 2000);
+
+            }
+        }).catch((error) => {
+            setMessage("Unable to edit task, an error occurred :: " + error);
+            setColor("danger");
+            setShowAlert(true);
+            setShowLoading(false);
+        });
+
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
+    return (
+        <div>
+            <Form
+                layout="vertical"
+                onFinish={editTask}
+                onFinishFailed={onFinishFailed}
+                fields={[
+                    {
+                        name: ["type"],
+                        value: type,
+                    },{
+                        name: ["project"],
+                        value: selectedProject,
+                    },{
+                        name: ["assigned"],
+                        value: selectedUser,
+                    },{
+                        name: ["status"],
+                        value: status,
+                    },{
+                        name: ["title"],
+                        value: title,
+                    },{
+                        name: ["description"],
+                        value: desc,
+                    },{
+                        name: ["deadline"],
+                        value: !deadline ? undefined : moment(deadline, "YYYY-MM-DD h:mm"),
+                    }
+                ]}
+            >
+                <Form.Item label="Title"
+                           name="title"
+                           rules={[{ required: true, message: 'Please input task title!' }]}>
+                    <Input type="text" placeholder="enter task title" id="title"/>
+                </Form.Item>
+                <Form.Item label="Description"
+                           name="description"
+                           rules={[{ required: true, message: 'Please input description!' }]}>
+                    <TextArea type="text" placeholder="enter task description" aria-multiline={true} id="description"/>
+                </Form.Item>
+                <Form.Item label="Task Type"
+                           name="type"
+                           rules={[{ required: true, message: 'Please input task type!' }]}>
+                    <Select placeholder="Select task type"
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            filterSort={(optionA, optionB) =>
+                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                            }
+                            onChange={changeType}>
+                        {["Bug Fix", "Implementation", "Code Review"].map((item, index) => (
+                            <Select.Option key={index}  value={item}>{item}</Select.Option>
+                        ))}
+
+                    </Select>
+                </Form.Item>
+
+                <Form.Item label="Assigned Project"
+                           name="project"
+                           rules={[{ required: true, message: 'Please select the assigned project!' }]}>
+                    <Select placeholder="Select assigned project"
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            filterSort={(optionA, optionB) =>
+                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                            }
+                            onChange={changeProject}>
+                        {projects.map((item, index) => (
+                            <Select.Option key={index}  value={item.projectID}>{item.name}</Select.Option>
+                        ))}
+
+                    </Select>
+                </Form.Item>
+
+                <Form.Item label="Assigned To"
+                           name="assigned"
+                           rules={[{ required: true, message: 'Please select the assigned devs!' }]}>
+                    <Select placeholder="Select assigned users"
+                            showSearch
+                            multiple={true}
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            filterSort={(optionA, optionB) =>
+                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                            }
+                            onChange={changeUser}>
+                        {users.map((item, index) => (
+                            <Select.Option key={index}  value={item.userID}>{item.firstname + " " + item.surname}</Select.Option>
+                        ))}
+
+                    </Select>
+                </Form.Item>
+
+                <Form.Item label="Task Status"
+                           name="status"
+                           rules={[{ required: true, message: 'Please input task status!' }]}>
+                    <Select placeholder="Select task status"
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            filterSort={(optionA, optionB) =>
+                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                            }
+                            onChange={changeStatus}>
+                        {["Incomplete", "Complete", "Pending Further Info"].map((item, index) => (
+                            <Select.Option key={index}  value={item}>{item}</Select.Option>
+                        ))}
+
+                    </Select>
+                </Form.Item>
+
+                <Form.Item
+                    label="Select Task Deadline"
+                    name="deadline"
+                    rules={[{ required: true,
+                        message: 'Please input task deadline' }]}>
+                    <DatePicker
+                        placeholder="select deadline date"
+                        showTime={{ format: 'HH:mm' }}
+                        picker={"date"}
+                        className="w-100"
+                        onChange={changeDate} />
+
+                </Form.Item>
+
+
+                {showAlert?
+                    <>
+                        <MDBAlert color={color} className="my-3 font-italic" >
+                            {message}
+                        </MDBAlert>
+                    </>
+                    : null }
+
+                <Button appearance="primary" htmlType="submit" isLoading={showLoading}>
+                    Edit
+                </Button>
+
+            </Form>
+
+        </div>
+    )
+
+}
+
+export default EditTaskModal;

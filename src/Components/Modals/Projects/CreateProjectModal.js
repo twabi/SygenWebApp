@@ -55,11 +55,12 @@ const CreateProjectModal = (props) => {
 
     useEffect(() => {
         if(loggedInUser){
-            console.log(loggedInUser.uid);
-            setCreatedByID(loggedInUser.uid);
+            var userId = users[users.findIndex(x => (x.email) === loggedInUser.email)]
+                &&users[users.findIndex(x => (x.email) === loggedInUser.email)].userID
+            setCreatedByID(userId);
         }
 
-    }, [loggedInUser])
+    }, [loggedInUser, users])
 
 
     const addProject = (result) => {

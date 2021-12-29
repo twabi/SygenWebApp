@@ -69,7 +69,7 @@ const CreateUserModal = (props) => {
                     output.then((result) => {
                         console.log(result);
                         if(result === "success"){
-                            emailjs.send("service_efpjx59","template_jupp43q", templateParams)
+                            emailjs.send("service_efpjx59","template_lcrv5bc", templateParams)
                                 .then(function(response) {
                                     console.log('SUCCESS!', response.status, response.text);
                                 }, function(error) {
