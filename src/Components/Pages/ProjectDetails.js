@@ -10,10 +10,11 @@ import Firebase from "../Firebase";
 import {AddIcon, Badge, Button, DeleteIcon, Dialog, EditIcon, TrashIcon} from "evergreen-ui";
 import {deleteProject, showEditModal} from "./Projects";
 import EditProjectModal from "../Modals/Projects/EditProjectModal";
-import {DeleteColumnOutlined, EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons';
 import CreateTaskModal from "../Modals/Tasks/CreateTaskModal";
 import EditTaskModal from "../Modals/Tasks/EditTaskModal";
 import {deleteTask, handleEdit} from "./Tasks";
+import AddUserLayout from "../Modals/Projects/AddUser";
+import FireFetch from "../FireFetch";
 
 
 const { Content } = Layout;
@@ -43,6 +44,7 @@ const ProjectDetails = () => {
     const [showModal, setShowModal] = useState(false);
     const [memberArray, setMemberArray] = useState([]);
     const [memberLoading, setMemberLoading] = useState(true);
+    const [showAddModal, setShowAddModal] = useState(false);
 
 
     const callback = (data) => {
@@ -61,7 +63,8 @@ const ProjectDetails = () => {
                         users[users.findIndex(x => (x.userID) === itemID)].firstname + " " +
                         users[users.findIndex(x => (x.userID) === itemID)].surname,
                     title: users[users.findIndex(x => (x.userID) === itemID)]&&
-                        users[users.findIndex(x => (x.userID) === itemID)].role
+                        users[users.findIndex(x => (x.userID) === itemID)].role,
+                    id: itemID
                 });
             });
             setMemberLoading(false);
@@ -78,10 +81,35 @@ const ProjectDetails = () => {
             setTaskArray(tasks.filter(x => x.projectID === id));
         }
         
-    }, [error, id, snapshot, tasks])
+    }, [error, id, snapshot, tasks, users])
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function deleteMember(memberID) {
+        var mArray = projectDet&&projectDet.members;
+        var index = mArray.indexOf(memberID);
+        mArray.splice(index, 1);
+        console.log(mArray);
+
+        const output = FireFetch.updateInDB("Projects", id, {"members" : mArray});
+        output.then((result) => {
+            console.log(result);
+            if(result === "success"){
+                setMessage("Member deleted successfully");
+                setShowAlert(true);
+                setColor("success");
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 2100);
+
+            }
+        }).catch((error) => {
+            setMessage("Unable to remove member, an error occurred :: " + error);
+            setColor("danger");
+            setShowAlert(true);
+        })
     }
 
     return (
@@ -94,6 +122,14 @@ const ProjectDetails = () => {
                         className="site-layout-background"
                         style={{ margin: '9px 14px 15px'}}
                     >
+                        <Dialog
+                            isShown={showAddModal}
+                            title="Add members to Project"
+                            onCloseComplete={() => {setShowAddModal(false)}}
+                            shouldCloseOnOverlayClick={false}
+                            hasFooter={false}>
+                            <AddUserLayout members={projectDet&&projectDet.members} projectID={id} modal={setShowAddModal}/>
+                        </Dialog>
                         <Dialog
                             isShown={showModal}
                             title="Create New Task"
@@ -302,7 +338,7 @@ const ProjectDetails = () => {
                                                     </div>
                                                 </MDBCol>
                                                 <MDBCol>
-                                                    <Button type="primary" className="mx-1" onClick={() => {}}>
+                                                    <Button type="primary" className="mx-1" onClick={() => {setShowAddModal(true)}}>
                                                         <AddIcon color="info"/>
                                                     </Button>
                                                 </MDBCol>
@@ -312,7 +348,7 @@ const ProjectDetails = () => {
                                             <MDBRow>
                                                 <Card bordered={false} className="w-100 bg-white">
                                                     <List
-                                                        grid={{column: 4 }}
+                                                        grid={{gutter:16, column: 3 }}
                                                         loading={memberLoading}
                                                         dataSource={memberArray}
                                                         renderItem={item => (
@@ -322,7 +358,7 @@ const ProjectDetails = () => {
                                                                     actions={[<TrashIcon color="danger" onClick={() => {
                                                                         // eslint-disable-next-line no-restricted-globals
                                                                         if (confirm("Are you sure you want to remove user from this project?")) {
-                                                                            //deleteTask(item.taskID, setColor, setShowAlert, setMessage);
+                                                                            deleteMember(item.id)
                                                                         }
                                                                     }}/>]}>
                                                                     <Meta

@@ -76,9 +76,9 @@ const EditProjectModal = (props) => {
         output.then((result) => {
             console.log(result);
             if(result === "success"){
-                setMessage("Projects edited successfully");
-                setShowLoading(false);
+                setMessage("Project edited successfully");
                 setShowAlert(true);
+                setShowLoading(false);
                 setColor("success");
                 setTimeout(() => {
                     setShowAlert(false);
@@ -87,7 +87,7 @@ const EditProjectModal = (props) => {
 
             }
         }).catch((error) => {
-            setMessage("Unable to edit outlet, an error occurred :: " + error);
+            setMessage("Unable to edit project, an error occurred :: " + error);
             setColor("danger");
             setShowAlert(true);
             setShowLoading(false);
