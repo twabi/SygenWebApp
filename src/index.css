@@ -23,3 +23,8 @@ code {
   border-bottom: 2px solid #f06000 !important;
 }
 
+.scroll {
+  height: 400px;
+  overflow-y: auto;
+}
+

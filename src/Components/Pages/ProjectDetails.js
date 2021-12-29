@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Alert, Card, Layout, Progress} from 'antd';
+import {Alert, Avatar, Card, Layout, List, Progress, Skeleton, Space} from 'antd';
 import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
 import {MDBAlert, MDBBox, MDBCol, MDBRow} from "mdbreact";
@@ -7,14 +7,20 @@ import {Text} from "react-font";
 import {useParams} from "react-router";
 import {useListVals, useObject} from "react-firebase-hooks/database";
 import Firebase from "../Firebase";
-import {AddIcon, Button, Dialog, EditIcon, TrashIcon} from "evergreen-ui";
+import {AddIcon, Badge, Button, Dialog, EditIcon, TrashIcon} from "evergreen-ui";
 import {deleteProject, showEditModal} from "./Projects";
 import EditProjectModal from "../Modals/Projects/EditProjectModal";
+import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+import CreateTaskModal from "../Modals/Tasks/CreateTaskModal";
+import EditTaskModal from "../Modals/Tasks/EditTaskModal";
+import {deleteTask, handleEdit} from "./Tasks";
 
 
 const { Content } = Layout;
 const moment = require('moment');
+var now = moment();
 const userRef = Firebase.database().ref('System/Users');
+const taskRef = Firebase.database().ref('System/Tasks');
 const ProjectDetails = () => {
 
     const { id } = useParams();
@@ -27,8 +33,13 @@ const ProjectDetails = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [projectDet, setProjectDet] = useState(null);
     const [users] = useListVals(userRef);
+    const [tasks, taskLoading] = useListVals(taskRef);
+    const [taskArray, setTaskArray] = useState([]);
     const [editModal, setEditModal] = useState(false);
     const [editProject, setEditProject] = useState(null);
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [editTaskModal, setEditTaskModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
 
     const callback = (data) => {
@@ -38,7 +49,6 @@ const ProjectDetails = () => {
     useEffect(() => {
         //console.log(id)
         if(snapshot){
-            console.log(snapshot.val());
             setProjectDet(snapshot.val());
         }
         
@@ -48,11 +58,22 @@ const ProjectDetails = () => {
             setShowAlert(true);   
         }
         
-    }, [error, id, snapshot])
+        if(tasks){
+            setTaskArray(tasks.filter(x => x.projectID === id));
+        }
+        
+    }, [error, id, snapshot, tasks])
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+    const IconText = ({ icon, text }) => (
+        <Space>
+            {React.createElement(icon)}
+            {text}
+        </Space>
+    );
 
     return (
         <>
@@ -64,6 +85,31 @@ const ProjectDetails = () => {
                         className="site-layout-background"
                         style={{ margin: '9px 14px 15px'}}
                     >
+                        <Dialog
+                            isShown={showModal}
+                            title="Create New Task"
+                            onCloseComplete={() => {setShowModal(false)}}
+                            shouldCloseOnOverlayClick={false}
+                            hasFooter={false}>
+
+                            <MDBCol md={12}>
+                                <CreateTaskModal modal={setShowModal}/>
+                            </MDBCol>
+
+                        </Dialog>
+
+                        <Dialog
+                            isShown={editTaskModal}
+                            title="Edit Task"
+                            onCloseComplete={() => {setEditTaskModal(false)}}
+                            shouldCloseOnOverlayClick={false}
+                            hasFooter={false}>
+
+                            <MDBCol md={12}>
+                                <EditTaskModal modal={setEditTaskModal} selectedTask={selectedTask}/>
+                            </MDBCol>
+
+                        </Dialog>
 
                         <Dialog
                             isShown={editModal}
@@ -129,28 +175,28 @@ const ProjectDetails = () => {
                                             <MDBRow left>
                                                 <Card bordered={false} className="w-100 bg-white">
                                                     <div>
-                                                        <Alert message={<>Description: <b>{projectDet&&projectDet.description}</b></>} className="w-100 my-1 deep-orange-text"
+                                                        <Alert message={<>Description: &nbsp;&nbsp;<b>{projectDet&&projectDet.description}</b></>} className="w-100 my-1 deep-orange-text"
                                                                style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
-                                                        <Alert message={<>Status: <b>{projectDet&&projectDet.status}</b></>} className="w-100 my-1 deep-orange-text"
+                                                        <Alert message={<>Status: &nbsp;&nbsp;<b>{projectDet&&projectDet.status}</b></>} className="w-100 my-1 deep-orange-text"
                                                                style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
-                                                        <Alert message={<>Period: <b>{moment(projectDet&&projectDet.startDate, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY") + " - " +
+                                                        <Alert message={<>Period: &nbsp;&nbsp;<b>{moment(projectDet&&projectDet.startDate, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY") + " - " +
                                                             moment(projectDet&&projectDet.endDate, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY")}</b></>}
                                                                className="w-100 my-1 deep-orange-text"
                                                                style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
-                                                        <Alert message={<>Type: <b>{projectDet&&projectDet.type}</b></>} className="w-100 my-1 deep-orange-text"
+                                                        <Alert message={<>Type: &nbsp;&nbsp;<b>{projectDet&&projectDet.type}</b></>} className="w-100 my-1 deep-orange-text"
                                                                style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
-                                                        <Alert message={<>Payment type: <b>{projectDet&&projectDet.paymentType}</b></>} className="w-100 my-1 deep-orange-text"
+                                                        <Alert message={<>Payment type: &nbsp;&nbsp;<b>{projectDet&&projectDet.paymentType}</b></>} className="w-100 my-1 deep-orange-text"
                                                                style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
-                                                        <Alert message={<>Payment Amount: <b>K{projectDet&&numberWithCommas(projectDet.amount)}</b></>} className="w-100 my-1 deep-orange-text"
+                                                        <Alert message={<>Payment Amount: &nbsp;&nbsp;<b>K{projectDet&&numberWithCommas(projectDet.amount)}</b></>} className="w-100 my-1 deep-orange-text"
                                                                style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
-                                                        <Alert message={<>Created By: <b>{
+                                                        <Alert message={<>Created By: &nbsp;&nbsp;<b>{
                                                             projectDet&&
                                                             users[users.findIndex(x => (x.userID) === projectDet.createdByID)]&&
                                                             users[users.findIndex(x => (x.userID) === projectDet.createdByID)].firstname + " " +
                                                             users[users.findIndex(x => (x.userID) === projectDet.createdByID)].surname
                                                         }</b></>} className="w-100 my-1 deep-orange-text"
                                                                style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
-                                                        <Alert message={<>Date Created: <b>{moment(projectDet&&projectDet.dateCreated, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY")}</b></>} className="w-100 my-1 deep-orange-text"
+                                                        <Alert message={<>Date Created: &nbsp;&nbsp;<b>{moment(projectDet&&projectDet.dateCreated, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY")}</b></>} className="w-100 my-1 deep-orange-text"
                                                                style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
                                                     </div>
                                                 </Card>
@@ -174,9 +220,7 @@ const ProjectDetails = () => {
                                                     </div>
                                                 </MDBCol>
                                                 <MDBCol>
-                                                    <Button type="primary" className="mx-1" onClick={() => {
-                                                        //showEditModal(project);
-                                                    }}>
+                                                    <Button type="primary" className="mx-1" onClick={() => {setShowModal(true)}}>
                                                         <AddIcon color="info"/>
                                                     </Button>
                                                 </MDBCol>
@@ -184,7 +228,49 @@ const ProjectDetails = () => {
                                             </MDBRow>
                                             <hr/>
                                             <MDBRow>
-                                                <Card bordered={false} className="w-100 bg-white">
+                                                <Card bordered={false} className="w-100 bg-white scroll">
+                                                    <List
+                                                        loading={taskLoading}
+                                                        itemLayout="vertical"
+                                                        dataSource={taskArray}
+                                                        renderItem={item => (
+                                                            <List.Item
+                                                                key={item.title}
+                                                                actions={[
+                                                                    <Badge color={item.taskStatus === "Complete" ? "green" : "neutral"}>{item.taskStatus}</Badge>,
+                                                                    <Badge color={now.isBefore(moment(item.deadline, "YYYY-MM-DDTh:mm").format("DD MMM YYYY")) ? "green" : "neutral"}>
+                                                                        {moment(item.deadline, "YYYY-MM-DDTh:mm").format("DD MMM YYYY")}</Badge>,
+                                                                    <EditIcon onClick={ () => {handleEdit(item, setSelectedTask, setEditTaskModal)}} color="info"/>,
+                                                                    <TrashIcon color="danger" onClick={() => {
+                                                                        // eslint-disable-next-line no-restricted-globals
+                                                                        if (confirm("Are you sure you want to delete Task?")) {
+                                                                            deleteTask(item.taskID, setColor, setShowAlert, setMessage);
+                                                                        }
+                                                                    }
+                                                                    }/>
+                                                                ]}
+                                                            >
+                                                                <List.Item.Meta
+                                                                    avatar={<Avatar className="float-left d-inline"
+                                                                                    style={{ backgroundColor: "#f06000", verticalAlign: 'middle' }} size="small" gap={1}>T</Avatar>}
+                                                                    title={<a href="">{item.title}</a>}
+                                                                    description={item.description}
+                                                                />
+                                                                <div>
+                                                                    <div className="d-flex flex-row">
+                                                                        Assigned To: &nbsp;&nbsp; {item&&item.assignedTo.map((userid) => (
+                                                                            <>
+                                                                                <b className="d-inline">{users[users.findIndex(x => (x.userID) === userid)] &&
+                                                                                users[users.findIndex(x => (x.userID) === userid)].firstname + " " +
+                                                                                users[users.findIndex(x => (x.userID) === userid)].surname}</b>,&nbsp;
+                                                                            </>
+
+                                                                    ))}
+                                                                    </div>
+                                                                </div>
+                                                            </List.Item>
+                                                        )}
+                                                    />
                                                 </Card>
 
                                             </MDBRow>

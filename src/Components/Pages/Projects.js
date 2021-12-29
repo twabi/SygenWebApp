@@ -150,7 +150,6 @@ const Projects = () => {
                                         : null }
                                     <Card className="d-flex flex-column">
                                         <>
-
                                             <MDBRow>
                                                 <MDBCol>
 

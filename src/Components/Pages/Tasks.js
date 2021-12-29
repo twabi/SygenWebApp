@@ -119,14 +119,13 @@ const Tasks = () => {
                             <Button intent="danger" onClick={() => {
                                 // eslint-disable-next-line no-restricted-globals
                                 if (confirm("Are you sure you want to delete Task?")) {
-                                    deleteTask(task.taskID);
+                                    deleteTask(task.taskID, setColor, setShowAlert, setMessage);
                                 }
                             }}>
                                 <TrashIcon color="danger"/>
                             </Button>
                             <Button intent="edit" onClick={() => {
-                                setSelectedTask(task);
-                                setEditModal(true);
+                                handleEdit(task, setSelectedTask, setEditModal);
                             }}>
                                 <EditIcon color="primary"/>
                             </Button></div>
@@ -164,27 +163,6 @@ const Tasks = () => {
             });
         }
         setDataArray(filteredEvents);
-    }
-
-
-    const deleteTask = (taskID) => {
-        const output = FireFetch.DeleteFromDB("Tasks", taskID);
-        output.then((result) => {
-            console.log(result);
-            if(result === "success"){
-                setMessage("Task deleted successfully");
-                setColor("success");
-                setShowAlert(true);
-                setTimeout(() => {
-                    setShowAlert(false);
-                }, 3000);
-            }
-        })
-            .catch((error) => {
-                setMessage("Unable to delete task occurred :: " + error.message);
-                setColor("danger");
-                setShowAlert(true);
-            });
     }
 
     return (
@@ -302,6 +280,31 @@ const Tasks = () => {
             </Layout>
         </>
     )
+}
+
+export const handleEdit = (task, setSelectedTask, setEditModal) => {
+    setSelectedTask(task);
+    setEditModal(true);
+}
+
+export const deleteTask = (taskID, setColor, setShowAlert, setMessage) => {
+    const output = FireFetch.DeleteFromDB("Tasks", taskID);
+    output.then((result) => {
+        console.log(result);
+        if(result === "success"){
+            setMessage("Task deleted successfully");
+            setColor("success");
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 3000);
+        }
+    })
+        .catch((error) => {
+            setMessage("Unable to delete task occurred :: " + error.message);
+            setColor("danger");
+            setShowAlert(true);
+        });
 }
 
 export default Tasks;
