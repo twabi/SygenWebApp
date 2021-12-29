@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from 'react'
-import {Card, Layout, Progress} from 'antd';
+import {Alert, Card, Layout, Progress} from 'antd';
 import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
 import {MDBAlert, MDBBox, MDBCol, MDBRow} from "mdbreact";
 import {Text} from "react-font";
 import {useParams} from "react-router";
-import {useObject} from "react-firebase-hooks/database";
+import {useListVals, useObject} from "react-firebase-hooks/database";
 import Firebase from "../Firebase";
-import {AddIcon, Button, EditIcon, TrashIcon} from "evergreen-ui";
+import {AddIcon, Button, Dialog, EditIcon, TrashIcon} from "evergreen-ui";
+import {deleteProject, showEditModal} from "./Projects";
+import EditProjectModal from "../Modals/Projects/EditProjectModal";
 
 
 const { Content } = Layout;
-
+const moment = require('moment');
+const userRef = Firebase.database().ref('System/Users');
 const ProjectDetails = () => {
 
     const { id } = useParams();
@@ -23,6 +26,9 @@ const ProjectDetails = () => {
     const [message, setMessage] = useState("");
     const [showAlert, setShowAlert] = useState(false);
     const [projectDet, setProjectDet] = useState(null);
+    const [users] = useListVals(userRef);
+    const [editModal, setEditModal] = useState(false);
+    const [editProject, setEditProject] = useState(null);
 
 
     const callback = (data) => {
@@ -44,6 +50,10 @@ const ProjectDetails = () => {
         
     }, [error, id, snapshot])
 
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     return (
         <>
             <Layout style={{width: "100vw"}}>
@@ -55,6 +65,19 @@ const ProjectDetails = () => {
                         style={{ margin: '9px 14px 15px'}}
                     >
 
+                        <Dialog
+                            isShown={editModal}
+                            title="Edit Project"
+                            onCloseComplete={() => {setEditModal(false)}}
+                            shouldCloseOnOverlayClick={false}
+                            hasFooter={false}>
+
+                            <MDBCol md={12}>
+                                <EditProjectModal editProject={editProject} modal={setEditModal}/>
+                            </MDBCol>
+
+                        </Dialog>
+
                         <div className="p-2">
                             {showAlert?
                                 <>
@@ -65,12 +88,7 @@ const ProjectDetails = () => {
                                 : null }
                             <>
                                 <MDBRow>
-                                    {loading ?
-                                        <div className="d-flex justify-content-center">
-                                            <div className="spinner-border mx-4 my-4 deep-orange-text spinner-border" role="status">
-                                                <span className="sr-only">Loading...</span>
-                                            </div>
-                                        </div> : null}
+
                                     <MDBCol md={7}>
                                         <Card className="mt-2 w-100">
                                             <MDBRow>
@@ -82,17 +100,23 @@ const ProjectDetails = () => {
                                                             </Text>
                                                         </h3>
                                                     </div>
+                                                    {loading ?
+                                                    <div className="d-flex justify-content-center">
+                                                        <div className="spinner-border mx-4 my-4 deep-orange-text spinner-border" role="status">
+                                                            <span className="sr-only">Loading...</span>
+                                                        </div>
+                                                    </div> : null}
                                                 </MDBCol>
                                                 <MDBCol>
                                                     <Button type="primary" className="mx-1" onClick={() => {
-                                                        //showEditModal(project);
+                                                        showEditModal(projectDet, setEditProject, setEditModal);
                                                     }}>
                                                         <EditIcon color="info"/>
                                                     </Button>
                                                     <Button className="mx-1" type="danger" onClick={() => {
                                                         // eslint-disable-next-line no-restricted-globals
-                                                        if (confirm("Are you sure you want to delete outlet?")) {
-                                                            //deleteProject(project.projectID);
+                                                        if (confirm("Are you sure you want to delete project?")) {
+                                                            deleteProject(projectDet.projectID, setMessage, setColor, setShowAlert);
                                                         }
 
                                                     }}>
@@ -102,8 +126,33 @@ const ProjectDetails = () => {
 
                                             </MDBRow>
                                             <hr/>
-                                            <MDBRow>
+                                            <MDBRow left>
                                                 <Card bordered={false} className="w-100 bg-white">
+                                                    <div>
+                                                        <Alert message={<>Description: <b>{projectDet&&projectDet.description}</b></>} className="w-100 my-1 deep-orange-text"
+                                                               style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                        <Alert message={<>Status: <b>{projectDet&&projectDet.status}</b></>} className="w-100 my-1 deep-orange-text"
+                                                               style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                        <Alert message={<>Period: <b>{moment(projectDet&&projectDet.startDate, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY") + " - " +
+                                                            moment(projectDet&&projectDet.endDate, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY")}</b></>}
+                                                               className="w-100 my-1 deep-orange-text"
+                                                               style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                        <Alert message={<>Type: <b>{projectDet&&projectDet.type}</b></>} className="w-100 my-1 deep-orange-text"
+                                                               style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                        <Alert message={<>Payment type: <b>{projectDet&&projectDet.paymentType}</b></>} className="w-100 my-1 deep-orange-text"
+                                                               style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                        <Alert message={<>Payment Amount: <b>K{projectDet&&numberWithCommas(projectDet.amount)}</b></>} className="w-100 my-1 deep-orange-text"
+                                                               style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                        <Alert message={<>Created By: <b>{
+                                                            projectDet&&
+                                                            users[users.findIndex(x => (x.userID) === projectDet.createdByID)]&&
+                                                            users[users.findIndex(x => (x.userID) === projectDet.createdByID)].firstname + " " +
+                                                            users[users.findIndex(x => (x.userID) === projectDet.createdByID)].surname
+                                                        }</b></>} className="w-100 my-1 deep-orange-text"
+                                                               style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                        <Alert message={<>Date Created: <b>{moment(projectDet&&projectDet.dateCreated, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY")}</b></>} className="w-100 my-1 deep-orange-text"
+                                                               style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                    </div>
                                                 </Card>
 
                                             </MDBRow>
@@ -111,6 +160,7 @@ const ProjectDetails = () => {
                                         </Card>
 
                                     </MDBCol>
+
                                     <MDBCol>
                                         <Card className="mt-2 w-100">
                                             <MDBRow>
@@ -143,6 +193,31 @@ const ProjectDetails = () => {
                                     </MDBCol>
                                 </MDBRow>
 
+                                <MDBRow>
+                                    <MDBCol>
+                                        <Card className="mt-2 w-100">
+                                            <MDBRow>
+                                                <MDBCol md={9}>
+                                                    <div className="d-block ml-1">
+                                                        <h3 className="font-weight-bold">
+                                                            <Text family='Nunito'>
+                                                                Members Assigned
+                                                            </Text>
+                                                        </h3>
+                                                    </div>
+                                                </MDBCol>
+
+                                            </MDBRow>
+                                            <hr/>
+                                            <MDBRow>
+                                                <Card bordered={false} className="w-100 bg-white">
+                                                </Card>
+
+                                            </MDBRow>
+
+                                        </Card>
+                                    </MDBCol>
+                                </MDBRow>
                                 <MDBRow>
                                     <MDBCol md={12}>
                                         <Card className="mt-2 w-100">

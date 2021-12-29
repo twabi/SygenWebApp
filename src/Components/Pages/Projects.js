@@ -70,30 +70,7 @@ const Projects = () => {
         }
     }, [projects, loading, error]);
 
-    const showEditModal = (project) => {
-        setEditProject(project);
-        setEditModal(true);
-    }
 
-    const deleteProject = (projectID) => {
-        const output = FireFetch.DeleteFromDB("Projects", projectID);
-        output.then((result) => {
-            console.log(result);
-            if(result === "success"){
-                setMessage("Project deleted successfully");
-                setColor("success");
-                setShowAlert(true);
-                setTimeout(() => {
-                    setShowAlert(false);
-                }, 3000);
-            }
-        })
-            .catch((error) => {
-                setMessage("Unable to delete Project occurred :: " + error.message);
-                setColor("danger");
-                setShowAlert(true);
-            })
-    }
 
     return (
         <>
@@ -222,14 +199,14 @@ const Projects = () => {
                                                                                         <EyeOpenIcon/>
                                                                                     </Button>
                                                                                     <Button type="primary" className="my-1" onClick={() => {
-                                                                                        showEditModal(project);
+                                                                                        showEditModal(project, setEditProject, setEditModal);
                                                                                     }}>
                                                                                         <EditIcon color="info"/>
                                                                                     </Button>
                                                                                     <Button className="my-1" type="danger" onClick={() => {
                                                                                         // eslint-disable-next-line no-restricted-globals
-                                                                                        if (confirm("Are you sure you want to delete outlet?")) {
-                                                                                            deleteProject(project.projectID);
+                                                                                        if (confirm("Are you sure you want to delete project?")) {
+                                                                                            deleteProject(project.projectID, setMessage, setColor, setShowAlert);
                                                                                         }
 
                                                                                     }}>
@@ -260,6 +237,31 @@ const Projects = () => {
             </Layout>
         </>
     )
+}
+
+export const showEditModal = (project, setEditProject, setEditModal) => {
+    setEditProject(project);
+    setEditModal(true);
+}
+
+export const deleteProject = (projectID, setMessage, setColor, setShowAlert) => {
+    const output = FireFetch.DeleteFromDB("Projects", projectID);
+    output.then((result) => {
+        console.log(result);
+        if(result === "success"){
+            setMessage("Project deleted successfully");
+            setColor("success");
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 3000);
+        }
+    })
+        .catch((error) => {
+            setMessage("Unable to delete Project occurred :: " + error.message);
+            setColor("danger");
+            setShowAlert(true);
+        })
 }
 
 export default Projects;
