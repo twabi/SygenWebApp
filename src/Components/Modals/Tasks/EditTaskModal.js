@@ -28,7 +28,11 @@ const EditTaskModal = (props) => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedTask, setSelectedTask] = useState(props.selectedTask);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [startDate, setStartDate] = useState(null);
 
+    function onChangeOne(date, dateString) {
+        setStartDate(dateString);
+    }
 
     function changeStatus (selectedOption) {
         setStatus(selectedOption);
@@ -65,21 +69,23 @@ const EditTaskModal = (props) => {
         props.selectedTask.description ? setDesc(props.selectedTask.description) : setDesc("");
         setType(props.selectedTask.taskType);
         setDeadline(props.selectedTask.deadline);
+        setStartDate(props.selectedTask.startDate);
 
-    }, [props, showBrand])
+    }, [props])
 
 
 
     const editTask = (values) => {
         setShowLoading(true);
 
-        var date = values.deadline;
-        console.log(date.format("YYYY-MM-DDTh:mm"));
+        var dateline = values.deadline;
+        var date = values.startDate;
 
         var object = {
             title : values.title,
             description : values.description,
-            deadline : date.format("YYYY-MM-DDTh:mm"),
+            startDate : date.format("YYYY-MM-DDTh:mm"),
+            deadline : dateline.format("YYYY-MM-DDTh:mm"),
             assignedTo : values.assigned,
             projectID : values.project,
             taskStatus : values.status,
@@ -142,6 +148,9 @@ const EditTaskModal = (props) => {
                     },{
                         name: ["description"],
                         value: desc,
+                    },{
+                        name: ["startDate"],
+                        value: !startDate ? undefined : moment(startDate, "YYYY-MM-DD h:mm"),
                     },{
                         name: ["deadline"],
                         value: !deadline ? undefined : moment(deadline, "YYYY-MM-DD h:mm"),
@@ -232,11 +241,25 @@ const EditTaskModal = (props) => {
                                 optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                             }
                             onChange={changeStatus}>
-                        {["Incomplete", "Complete", "Pending Further Info"].map((item, index) => (
+                        {["Incomplete", "Ongoing", "Complete", "Pending Further Info"].map((item, index) => (
                             <Select.Option key={index}  value={item}>{item}</Select.Option>
                         ))}
 
                     </Select>
+                </Form.Item>
+
+                <Form.Item
+                    label="Select task Start Date"
+                    name="startDate"
+                    rules={[{ required: true,
+                        message: 'Please input project start date!' }]}>
+                    <DatePicker
+                        placeholder="select starting date"
+                        picker={"date"}
+                        //defaultValue={moment('1990-01-01', 'YYYY-MM-DD')}
+                        className="w-100"
+                        onChange={onChangeOne} />
+
                 </Form.Item>
 
                 <Form.Item

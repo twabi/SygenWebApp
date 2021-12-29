@@ -25,6 +25,7 @@
     "react-dom": "^16.8.6",
     "react-firebase-hooks": "^3.0.4",
     "react-font": "^1.2.1",
+    "react-google-charts": "^3.0.15",
     "react-pro-sidebar": "^0.6.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",

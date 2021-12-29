@@ -22,6 +22,7 @@ const ViewTaskModal = (props) => {
     const [selectedProject, setSelectedProject] = useState(null);
     const [title, setTitle] = useState(null);
     const [desc, setDesc] = useState(null);
+    const [startDate, setStartDate] = useState(null);
 
 
     useEffect(() => {
@@ -31,12 +32,13 @@ const ViewTaskModal = (props) => {
         setSelectedProject(props.selectedTask.projectID);
         setStatus(props.selectedTask.taskStatus);
         setDateCreated(props.selectedTask.dateCreated);
-        console.log(props.selectedTask.dateCreated);
         setCreatedBy(props.selectedTask.createdByID);
+        setStartDate(props.selectedTask.startDate);
         props.selectedTask.title ? setTitle(props.selectedTask.title) : setTitle("");
         props.selectedTask.description ? setDesc(props.selectedTask.description) : setDesc("");
         setType(props.selectedTask.taskType);
         setDeadline(props.selectedTask.deadline);
+
 
 
     }, [props])
@@ -66,11 +68,11 @@ const ViewTaskModal = (props) => {
                         name: ["description"],
                         value: desc,
                     },{
+                        name: ["startDate"],
+                        value: !startDate ? undefined : moment(startDate, "YYYY-MM-DDTh:mm:ss"),
+                    },{
                         name: ["deadline"],
                         value: !deadline ? undefined : moment(deadline, "YYYY-MM-DD h:mm"),
-                    },{
-                        name: ["dateCreated"],
-                        value: !deadline ? undefined : moment(dateCreated, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY"),
                     },{
                         name: ["createdBy"],
                         value: users[users.findIndex(x => (x.userID) === createdBy)]&&
@@ -172,6 +174,20 @@ const ViewTaskModal = (props) => {
                 </Form.Item>
 
                 <Form.Item
+                    label="Select task Start Date"
+                    name="startDate"
+                    rules={[{ required: true,
+                        message: 'Please input project start date!' }]}>
+                    <DatePicker
+                        placeholder="select starting date"
+                        picker={"date"}
+                        //defaultValue={moment('1990-01-01', 'YYYY-MM-DD')}
+                        className="w-100"
+                        disabled={true} />
+
+                </Form.Item>
+
+                <Form.Item
                     label="Select Task Deadline"
                     name="deadline"
                     rules={[{ required: true,
@@ -183,13 +199,6 @@ const ViewTaskModal = (props) => {
                         disabled={true}
                         className="w-100" />
 
-                </Form.Item>
-
-                <Form.Item label="Date Created"
-                           name="dateCreated">
-                    <Input type="text"
-                           disabled={true}
-                           id="created"/>
                 </Form.Item>
 
                 <Form.Item label="Created By"

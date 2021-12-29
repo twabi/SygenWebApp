@@ -28,7 +28,11 @@ const CreateTaskModal = (props) => {
     const [deadline, setDeadline] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [startDate, setStartDate] = useState(null);
 
+    function onChangeOne(date, dateString) {
+        setStartDate(dateString);
+    }
     function changeStatus (selectedOption) {
         setStatus(selectedOption);
     }
@@ -67,8 +71,8 @@ const CreateTaskModal = (props) => {
     const addTask = (values) => {
         setShowLoading(true);
 
-        var date = values.deadline;
-        console.log(date.format("YYYY-MM-DDTh:mm"));
+        var dateline = values.deadline;
+        var date = values.startDate;
 
         var timeStamp = moment().format("YYYY-MM-DDTh:mm:ss");
         var taskID = Array(20).fill("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789")
@@ -80,7 +84,8 @@ const CreateTaskModal = (props) => {
             taskID : taskID,
             dateCreated:  timeStamp,
             createdByID: createdByID,
-            deadline : date.format("YYYY-MM-DDTh:mm"),
+            startDate : date.format("YYYY-MM-DDTh:mm"),
+            deadline : dateline.format("YYYY-MM-DDTh:mm"),
             assignedTo : values.assigned,
             projectID : values.project,
             taskStatus : values.status,
@@ -231,11 +236,25 @@ const CreateTaskModal = (props) => {
                                 optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                             }
                             onChange={changeStatus}>
-                        {["Incomplete", "Complete", "Pending Further Info"].map((item, index) => (
+                        {["Incomplete", "Ongoing", "Complete", "Pending Further Info"].map((item, index) => (
                             <Select.Option key={index}  value={item}>{item}</Select.Option>
                         ))}
 
                     </Select>
+                </Form.Item>
+
+                <Form.Item
+                    label="Select task Start Date"
+                    name="startDate"
+                    rules={[{ required: true,
+                        message: 'Please input project start date!' }]}>
+                    <DatePicker
+                        placeholder="select starting date"
+                        picker={"date"}
+                        //defaultValue={moment('1990-01-01', 'YYYY-MM-DD')}
+                        className="w-100"
+                        onChange={onChangeOne} />
+
                 </Form.Item>
 
                 <Form.Item

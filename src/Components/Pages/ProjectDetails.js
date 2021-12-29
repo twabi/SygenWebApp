@@ -7,7 +7,7 @@ import {Text} from "react-font";
 import {useParams} from "react-router";
 import {useListVals, useObject} from "react-firebase-hooks/database";
 import Firebase from "../Firebase";
-import {AddIcon, Badge, Button, DeleteIcon, Dialog, EditIcon, TrashIcon} from "evergreen-ui";
+import {AddIcon, Badge, Button, DeleteIcon, Dialog, EditIcon, PrintIcon, TrashIcon} from "evergreen-ui";
 import {deleteProject, showEditModal} from "./Projects";
 import EditProjectModal from "../Modals/Projects/EditProjectModal";
 import CreateTaskModal from "../Modals/Tasks/CreateTaskModal";
@@ -15,6 +15,7 @@ import EditTaskModal from "../Modals/Tasks/EditTaskModal";
 import {deleteTask, handleEdit} from "./Tasks";
 import AddUserLayout from "../Modals/Projects/AddUser";
 import FireFetch from "../FireFetch";
+import Gantt from "../Gantt";
 
 
 const { Content } = Layout;
@@ -384,7 +385,7 @@ const ProjectDetails = () => {
                                     <MDBCol md={12}>
                                         <Card className="mt-2 w-100">
                                             <MDBRow>
-                                                <MDBCol>
+                                                <MDBCol md={10}>
                                                     <div className="d-block ml-1">
                                                         <h3 className="font-weight-bold">
                                                             <Text family='Nunito'>
@@ -392,13 +393,17 @@ const ProjectDetails = () => {
                                                             </Text>
                                                         </h3>
                                                     </div>
-                                                    {/*<img src={program} className="img-fluid float-left p-4 mt-2" width={220} height={220} alt="" />*/}
                                                 </MDBCol>
-
+                                                <MDBCol>
+                                                    <Button type="primary" className="mx-1" onClick={() => {}}>
+                                                        <PrintIcon color="info"/>
+                                                    </Button>
+                                                </MDBCol>
                                             </MDBRow>
                                             <hr/>
                                             <MDBRow>
                                                 <Card bordered={false} className="w-100 bg-white">
+                                                    <Gantt projectID={id}/>
                                                 </Card>
 
                                             </MDBRow>
