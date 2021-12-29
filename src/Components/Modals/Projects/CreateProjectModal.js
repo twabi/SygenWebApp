@@ -5,6 +5,7 @@ import {MDBAlert} from "mdbreact";
 import {useAuthState} from "react-firebase-hooks/auth";
 import Firebase from "../../Firebase";
 import {useListVals} from "react-firebase-hooks/database";
+import FireFetch from "../../FireFetch";
 
 
 var storageRef = Firebase.storage().ref("System/Outlets");
@@ -65,67 +66,40 @@ const CreateProjectModal = (props) => {
 
     const addProject = (result) => {
         console.log(result);
-        /*
+
         setShowLoading(true);
 
-        var timeStamp = moment().format("YYYY-MM-DDTh:mm:ss");
-        var name = document.getElementById("outletName").value;
-        var area = document.getElementById("area").value;
-        var contactName = document.getElementById("contactName").value;
-        var contactEmail = document.getElementById("contactEmail").value
-        var contactPhone = document.getElementById("contactPhone").value;
-        var notes = document.getElementById("feedback").value;
-        var longitude = document.getElementById("long").value;
-        var latitude = document.getElementById("lat").value;
 
-        var outletID =  Array(20).fill("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        var timeStamp = moment().format("YYYY-MM-DDTh:mm:ss");
+        var projectID =  Array(20).fill("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             .map(function(x) { return x[Math.floor(Math.random() * x.length)] }).join('');
 
-        var location = selectedDistrict + ", " + area;
 
-        var overObj = {}
-        selectedProducts.map((item) => {
-
-            var obj = {
-                "quantity" : 0,
-                "updatedAt" : timeStamp,
-                "productID" : item
-            }
-            overObj[item] = obj;
-            //prodArray.push(overObj);
-        })
-
-        if(name.includes("/")){
+        if(result.name.includes("/")){
             alert("The name cannot include a slash, use a dash or another symbol instead")
         } else {
             var object = {
-                "name" : name,
-                "location" : location,
-                "contactPerson" : {
-                    "email" : contactEmail,
-                    "name" : contactName,
-                    "phone" : contactPhone
-                },
-                "coordinates" : {
-                    "longitude" : longitude,
-                    "latitude" : latitude
-                },
+                "name" : result.name,
+                "description" : result.description,
+                "startDate" : moment(result.startDate).format("YYYY-MM-DD"),
+                "endDate" : moment(result.endDate).format("YYYY-MM-DD"),
+                "type" : result.type,
+                "paymentType" : result.paymentType,
+                "amount" : result.amount,
+                "status" : result.status,
                 "dateCreated" : timeStamp,
                 "createdByID" : createdByID,
-                "feedbackNotes" : notes,
-                "outletID" : outletID,
-                "products" : overObj
+                "projectID" : projectID,
+                "members" : result.assigned
             };
 
             console.log(object);
 
-
-
-            const output = FireFetch.SaveTODB("Outlets", outletID, object);
+            const output = FireFetch.SaveTODB("Projects", projectID, object);
             output.then((result) => {
                 console.log(result);
                 if(result === "success"){
-                    setMessage("Projects added successfully");
+                    setMessage("Project added successfully");
                     setColor("success");
                     setShowAlert(true);
                     setShowLoading(false);
@@ -134,23 +108,18 @@ const CreateProjectModal = (props) => {
                         props.modal(false);
                     }, 2000);
 
-
-                    filesList.map((file, index) => {
-                        storageRef.child(outletID).child(""+index).put(file).then(function(snapshot) {
-                            console.log('Uploaded a blob or file!');
-                        });
-                    })
                 }
             }).catch((error) => {
-                setMessage("Unable to add outlet, an error occurred :: " + error);
+                setMessage("Unable to add project, an error occurred :: " + error);
                 setColor("danger");
                 setShowAlert(true);
                 setShowLoading(false);
             })
 
+
+
         }
 
-         */
     }
 
 
@@ -166,7 +135,7 @@ const CreateProjectModal = (props) => {
             >
 
                 <Form.Item label="Project name"
-                           name="Project name"
+                           name="name"
                            rules={[{ required: true, message: 'Please input outlet name!' }]}>
                     <Input placeholder="enter outlet name" id="outletName"/>
                 </Form.Item>
@@ -194,8 +163,7 @@ const CreateProjectModal = (props) => {
                 <Form.Item
                     label="Select Project End Date"
                     name="endDate"
-                    rules={[{ required: true,
-                        message: 'Please input project end date!' }]}>
+                    rules={[]}>
                     <DatePicker
                         placeholder="select ending date"
                         picker={"date"}
@@ -206,7 +174,9 @@ const CreateProjectModal = (props) => {
                 </Form.Item>
 
                 <Form.Item label="Project Type"
-                           name="type">
+                           name="type"
+                           rules={[{ required: true,
+                               message: 'Please input project type!' }]}>
                     <Select placeholder="Select project type"
                             showSearch
                             optionFilterProp="children"
@@ -251,7 +221,9 @@ const CreateProjectModal = (props) => {
                 </Form.Item>
 
                 <Form.Item label="Project Status"
-                           name="status">
+                           name="status"
+                           rules={[{ required: true,
+                               message: 'Please input project status!' }]}>
                     <Select placeholder="Select project status"
                             showSearch
                             optionFilterProp="children"
@@ -270,9 +242,9 @@ const CreateProjectModal = (props) => {
                 </Form.Item>
 
                 <Form.Item label="Select Members assigned to the project"
-                           name="members-assigned"
-                           rules={[{ required: true, message: 'Please select a district!' }]}>
-                    <Select placeholder="Select District of Outlet"
+                           name="assigned"
+                           rules={[{ required: true, message: 'Please select members assigned to the project!' }]}>
+                    <Select placeholder="Select members to be assigned"
                             showSearch
                             mode="multiple"
                             optionFilterProp="children"
@@ -298,7 +270,8 @@ const CreateProjectModal = (props) => {
                         </>
                         : null }
 
-                <Button type="primary" htmlType="submit" className="text-white" style={{background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
+                <Button type="primary" htmlType="submit" className="text-white"
+                        style={{color: "#fff", background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
                     Create
                 </Button>
 
