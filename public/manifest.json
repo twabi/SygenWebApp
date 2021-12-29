@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SygenMw",
+  "name": "An internal app for SygenMw",
   "icons": [
     {
       "src": "favicon.ico",
