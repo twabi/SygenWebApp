@@ -7,16 +7,17 @@ import {Text} from "react-font";
 import {useParams} from "react-router";
 import {useListVals, useObject} from "react-firebase-hooks/database";
 import Firebase from "../Firebase";
-import {AddIcon, Badge, Button, Dialog, EditIcon, TrashIcon} from "evergreen-ui";
+import {AddIcon, Badge, Button, DeleteIcon, Dialog, EditIcon, TrashIcon} from "evergreen-ui";
 import {deleteProject, showEditModal} from "./Projects";
 import EditProjectModal from "../Modals/Projects/EditProjectModal";
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+import {DeleteColumnOutlined, EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons';
 import CreateTaskModal from "../Modals/Tasks/CreateTaskModal";
 import EditTaskModal from "../Modals/Tasks/EditTaskModal";
 import {deleteTask, handleEdit} from "./Tasks";
 
 
 const { Content } = Layout;
+const { Meta } = Card;
 const moment = require('moment');
 var now = moment();
 const userRef = Firebase.database().ref('System/Users');
@@ -40,6 +41,8 @@ const ProjectDetails = () => {
     const [selectedTask, setSelectedTask] = useState(null);
     const [editTaskModal, setEditTaskModal] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [memberArray, setMemberArray] = useState([]);
+    const [memberLoading, setMemberLoading] = useState(true);
 
 
     const callback = (data) => {
@@ -50,6 +53,19 @@ const ProjectDetails = () => {
         //console.log(id)
         if(snapshot){
             setProjectDet(snapshot.val());
+            var proj = snapshot.val();
+            var tempArray = [];
+            proj.members.map((itemID) => {
+                tempArray.push({
+                    name : users[users.findIndex(x => (x.userID) === itemID)]&&
+                        users[users.findIndex(x => (x.userID) === itemID)].firstname + " " +
+                        users[users.findIndex(x => (x.userID) === itemID)].surname,
+                    title: users[users.findIndex(x => (x.userID) === itemID)]&&
+                        users[users.findIndex(x => (x.userID) === itemID)].role
+                });
+            });
+            setMemberLoading(false);
+            setMemberArray([...tempArray]);
         }
         
         if(error){
@@ -67,13 +83,6 @@ const ProjectDetails = () => {
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-
-    const IconText = ({ icon, text }) => (
-        <Space>
-            {React.createElement(icon)}
-            {text}
-        </Space>
-    );
 
     return (
         <>
@@ -283,7 +292,7 @@ const ProjectDetails = () => {
                                     <MDBCol>
                                         <Card className="mt-2 w-100">
                                             <MDBRow>
-                                                <MDBCol md={9}>
+                                                <MDBCol md={10}>
                                                     <div className="d-block ml-1">
                                                         <h3 className="font-weight-bold">
                                                             <Text family='Nunito'>
@@ -292,11 +301,42 @@ const ProjectDetails = () => {
                                                         </h3>
                                                     </div>
                                                 </MDBCol>
+                                                <MDBCol>
+                                                    <Button type="primary" className="mx-1" onClick={() => {}}>
+                                                        <AddIcon color="info"/>
+                                                    </Button>
+                                                </MDBCol>
 
                                             </MDBRow>
                                             <hr/>
                                             <MDBRow>
                                                 <Card bordered={false} className="w-100 bg-white">
+                                                    <List
+                                                        grid={{column: 4 }}
+                                                        loading={memberLoading}
+                                                        dataSource={memberArray}
+                                                        renderItem={item => (
+                                                            <List.Item>
+                                                                <Card
+                                                                    className="w-100"
+                                                                    actions={[<TrashIcon color="danger" onClick={() => {
+                                                                        // eslint-disable-next-line no-restricted-globals
+                                                                        if (confirm("Are you sure you want to remove user from this project?")) {
+                                                                            //deleteTask(item.taskID, setColor, setShowAlert, setMessage);
+                                                                        }
+                                                                    }}/>]}>
+                                                                    <Meta
+                                                                        avatar={<Avatar className="rounded float-left d-inline"
+                                                                                        style={{ backgroundColor: "#f06000", verticalAlign: 'middle' }} size={56} gap={1}>
+                                                                            {item.name[0]}
+                                                                        </Avatar>}
+                                                                        title={<b>{item.name}</b>}
+                                                                        description={item.title}
+                                                                    />
+                                                                </Card>
+                                                            </List.Item>
+                                                        )}
+                                                    />
                                                 </Card>
 
                                             </MDBRow>
