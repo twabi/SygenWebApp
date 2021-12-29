@@ -57,7 +57,7 @@ const ProjectDetails = () => {
             setProjectDet(snapshot.val());
             var proj = snapshot.val();
             var tempArray = [];
-            proj.members.map((itemID) => {
+            proj.members&&proj.members.map((itemID) => {
                 tempArray.push({
                     name : users[users.findIndex(x => (x.userID) === itemID)]&&
                         users[users.findIndex(x => (x.userID) === itemID)].firstname + " " +
@@ -332,7 +332,7 @@ const ProjectDetails = () => {
                                                     <div className="d-block ml-1">
                                                         <h3 className="font-weight-bold">
                                                             <Text family='Nunito'>
-                                                                Members Assigned
+                                                                Members Assigned ({memberArray&&memberArray.length})
                                                             </Text>
                                                         </h3>
                                                     </div>
@@ -348,7 +348,7 @@ const ProjectDetails = () => {
                                             <MDBRow>
                                                 <Card bordered={false} className="w-100 bg-white">
                                                     <List
-                                                        grid={{gutter:16, column: 3 }}
+                                                        grid={{gutter:16, column: 4 }}
                                                         loading={memberLoading}
                                                         dataSource={memberArray}
                                                         renderItem={item => (

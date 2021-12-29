@@ -77,7 +77,7 @@ const NavBar = (props) => {
                             </div>
                         </MDBDropdownToggle>
                         <MDBDropdownMenu className="dropdown-default">
-                            <MDBDropdownItem href="#!">Settings</MDBDropdownItem>
+                            <MDBDropdownItem href="#!">Change Password</MDBDropdownItem>
                             <MDBDropdownItem href="#!" onClick={handleLogout}>Log Out</MDBDropdownItem>
                         </MDBDropdownMenu>
                     </MDBDropdown>
