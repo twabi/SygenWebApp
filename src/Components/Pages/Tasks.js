@@ -108,6 +108,7 @@ const Tasks = () => {
                         status: <Badge color={task.taskStatus === "Complete" ? "green" : "neutral"}>{task.taskStatus}</Badge>,
                         deadline : <Badge color={now.isBefore(deadline) ? "green" : "neutral"}>{deadline}</Badge>,
                         date : dateAssigned,
+                        assignedTo : task.assignedTo,
                         action: <div>
                             <Button appearance="default" onClick={() => {
                                 setSelectedTask(task);
@@ -155,7 +156,9 @@ const Tasks = () => {
         let filteredEvents;
         if(option === "All"){
             filteredEvents = taskArray;
-        } else {
+        } else if (option === "My Tasks"){
+            filteredEvents = taskArray.filter(x => (x.assignedTo).includes(loggedInUser.uid));
+        }else {
             filteredEvents = taskArray.filter(({ status }) => {
                 status = status.props.children;
                 return status.includes(option);
@@ -242,7 +245,7 @@ const Tasks = () => {
                                                         {filter}
                                                     </MDBDropdownToggle>
                                                     <MDBDropdownMenu>
-                                                        {["All","Incomplete", "Complete", "Pending Further Info"].map((item, index) => (
+                                                        {["All","My Tasks", "Incomplete", "Complete", "Pending Further Info"].map((item, index) => (
                                                             <MDBDropdownItem onClick={() => {handleFilter(item); setFilter(item);}} key={index}>{item}</MDBDropdownItem>
                                                         ))}
                                                     </MDBDropdownMenu>

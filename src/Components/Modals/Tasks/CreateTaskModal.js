@@ -175,7 +175,7 @@ const CreateTaskModal = (props) => {
                                 optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                             }
                             onChange={changeType}>
-                        {["Bug Fix", "Implementation", "Code Review"].map((item, index) => (
+                        {["Planning", "Design", "Bug Fix", "Implementation", "Code Review", "Testing", "Deployment"].map((item, index) => (
                             <Select.Option key={index}  value={item}>{item}</Select.Option>
                         ))}
 

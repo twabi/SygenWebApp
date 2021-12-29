@@ -144,9 +144,6 @@ const Users = () => {
     };
 
     const deleteUser = (objectID) => {
-
-        alert("Currently not supported!");
-        /*
         var payload = {
             "uid": objectID
         }
@@ -163,6 +160,7 @@ const Users = () => {
                     setDeleteAlert(false);
                 }, 3000);
 
+                /*
                 //delete from firebase auth using the cloud function deployed url
                 fetch("https://us-central1-sales265-d18df.cloudfunctions.net/deleteUser",
                     {
@@ -180,14 +178,13 @@ const Users = () => {
                         console.log('error', error)
                     });
 
+                 */
             } else {
-                setMessage("Unable to add user and error occurred :: " + result);
+                setMessage("Unable to delete user and error occurred :: " + result);
                 setColor("danger");
                 setDeleteAlert(true);
             }
         });
-
-         */
 
     }
 
