@@ -1,10 +1,10 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Card, Layout} from 'antd';
 import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
 import {Text} from "react-font";
 import {
-    Dialog,
+    Dialog, Button,
     EditIcon,
     EyeOpenIcon,
     SearchInput,
@@ -15,7 +15,7 @@ import {
     MDBCol, MDBListGroup, MDBListGroupItem,
     MDBRow
 } from "mdbreact";
-import {Button, Alert} from 'antd';
+import {Alert} from 'antd';
 import {useListVals} from "react-firebase-hooks/database";
 import Firebase from "../Firebase";
 import CreateProjectModal from "../Modals/Projects/CreateProjectModal";
@@ -39,6 +39,18 @@ const Projects = () => {
 
     const handleSearch  = searchText => {
     }
+
+    useEffect(() => {
+        if(projects){
+            setDataArray([...projects]);
+        }
+
+        if(error){
+            setMessage("Unable to show projects occurred :: " + error.message);
+            setColor("danger");
+            setShowAlert(true);
+        }
+    }, [projects, loading, error])
 
     return (
         <>
@@ -84,7 +96,8 @@ const Projects = () => {
                                             <MDBRow className="ml-1">
                                                 <SearchInput height={40} placeholder="Search projects" className="w-100"
                                                              onChange={e => handleSearch(e.target.value)} />
-                                                <Button size="large" type="primary" style={{background: "#f06000", borderColor: "#f06000"}}
+                                                <Button height={40} appearance="primary"
+                                                        style={{background: "#f06000", borderColor: "#f06000", color: "#fff"}}
                                                         className="mx-2" onClick={() => {setCreateModal(true)}}>
                                                     New Project
                                                 </Button>
@@ -118,33 +131,56 @@ const Projects = () => {
                                                                         </div>
                                                                     </div> : null}
 
-                                                                {dataArray.map((outlet, index) => (
-                                                                    <MDBListGroupItem key={index} className="my-1 border-top border-info">
+                                                                {dataArray.map((project, index) => (
+                                                                    <MDBListGroupItem key={index}
+                                                                                      className="my-1 border-top border-dark">
                                                                         <div className="d-flex w-100 my-2 justify-content-between">
-                                                                            <h6 className="mb-1 indigo-text">{String(outlet.name).toUpperCase()}</h6>
-                                                                            <small className="font-italic">
-                                                                                {moment(outlet.dateCreated, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY")}
+                                                                            <div className="d-flex flex-column mt-2">
+                                                                                <h6 className="mb-1 font-weight-bolder">{String(project.name).toUpperCase()}</h6>
+                                                                                <small className="font-italic font-weight-bolder">
+                                                                                    {project.description}
+                                                                                </small>
+                                                                            </div>
+
+                                                                            <small className="font-italic font-weight-bolder">
+                                                                                {moment(project.dateCreated, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY")}
                                                                             </small>
                                                                         </div>
-                                                                        <Alert message={"Message"} className="w-100 mr-3" type="info" showIcon />
-                                                                        <Alert message={"Message"} className="w-100 mr-3" type="success" showIcon />
-                                                                        <div className="d-flex flex-row mt-3">
-                                                                            <Button className="mr-1" type="danger" onClick={() => {
-                                                                            }}>
-                                                                                <EyeOpenIcon/>
-                                                                            </Button>
-                                                                            <Button type="primary" className="mr-1" onClick={() => {
+                                                                        <MDBRow>
+                                                                            <MDBCol>
+                                                                                <Alert className="w-100 my-1 deep-orange-text"
+                                                                                       style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}}
+                                                                                       message={<>Period: <b>{moment(project.startDate, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY") + " - " +
+                                                                                moment(project.endDate, "YYYY-MM-DDTh:mm:ss").format("DD MMM YYYY")}</b></>}/>
 
-                                                                            }}>
-                                                                                <EditIcon color="info"/>
-                                                                            </Button>
-                                                                            <Button className="mr-1" type="danger" onClick={() => {
-                                                                                // eslint-disable-next-line no-restricted-globals
+                                                                                <Alert message={<>Status: <b>{project.status}</b></>} className="w-100 my-1 deep-orange-text"
+                                                                                       style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
 
-                                                                            }}>
-                                                                                <TrashIcon color="danger"/>
-                                                                            </Button>
-                                                                        </div>
+                                                                                <Alert message={<>Type: <b>{project.type}</b></>} className="w-100 my-1 deep-orange-text"
+                                                                                       style={{borderColor: "#ff6905", backgroundColor:"#ffdec9", color:"#ff6905"}} />
+                                                                            </MDBCol>
+                                                                            <MDBCol md={2}>
+                                                                                <div className="d-flex flex-column mt-2">
+                                                                                    <Button className="my-1" type="danger" onClick={() => {
+                                                                                    }}>
+                                                                                        <EyeOpenIcon/>
+                                                                                    </Button>
+                                                                                    <Button type="primary" className="my-1" onClick={() => {
+
+                                                                                    }}>
+                                                                                        <EditIcon color="info"/>
+                                                                                    </Button>
+                                                                                    <Button className="my-1" type="danger" onClick={() => {
+                                                                                        // eslint-disable-next-line no-restricted-globals
+
+                                                                                    }}>
+                                                                                        <TrashIcon color="danger"/>
+                                                                                    </Button>
+                                                                                </div>
+
+                                                                            </MDBCol>
+                                                                        </MDBRow>
+
 
                                                                     </MDBListGroupItem>
 
