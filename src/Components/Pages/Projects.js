@@ -21,6 +21,8 @@ import Firebase from "../Firebase";
 import CreateProjectModal from "../Modals/Projects/CreateProjectModal";
 import EditProjectModal from "../Modals/Projects/EditProjectModal";
 import FireFetch from "../FireFetch";
+import {useHistory} from "react-router-dom";
+import {generatePath} from "react-router";
 
 
 const { Content } = Layout;
@@ -28,6 +30,7 @@ const moment = require("moment");
 const dbRef = Firebase.database().ref('System/Projects');
 const Projects = () => {
 
+    const history = useHistory();
     const [color, setColor] = useState("info");
     const [message, setMessage] = useState("");
     const [showAlert, setShowAlert] = useState(false);
@@ -41,7 +44,18 @@ const Projects = () => {
         setCheckedData(data);
     }
 
+    const handleProceed = (id) => {
+        history.push(generatePath("/projects/:id", { id }));
+    };
+
     const handleSearch  = searchText => {
+        const filteredEvents = projects.filter(({ name, status, type }) => {
+            name = name.toLowerCase();
+            status = status.toLowerCase();
+            type = type.toLowerCase();
+            return name.includes(searchText) || status.includes(searchText) || type.includes(searchText);
+        });
+        setDataArray(filteredEvents);
     }
 
     useEffect(() => {
@@ -177,7 +191,7 @@ const Projects = () => {
                                                                                       className="my-1 border-top border-dark">
                                                                         <div className="d-flex w-100 my-2 justify-content-between">
                                                                             <div className="d-flex flex-column mt-2">
-                                                                                <h6 className="mb-1 font-weight-bolder">{String(project.name).toUpperCase()}</h6>
+                                                                                <h4 className="mb-1 font-weight-bold">{String(project.name).toUpperCase()}</h4>
                                                                                 <small className="font-italic font-weight-bolder">
                                                                                     {project.description}
                                                                                 </small>
@@ -203,6 +217,7 @@ const Projects = () => {
                                                                             <MDBCol md={2}>
                                                                                 <div className="d-flex flex-column w-50 mt-2">
                                                                                     <Button className="my-1" type="danger" onClick={() => {
+                                                                                        handleProceed(project.projectID)
                                                                                     }}>
                                                                                         <EyeOpenIcon/>
                                                                                     </Button>

@@ -66,8 +66,8 @@ const TabList = (props) => {
                 id="/projects"
                 className={collapsed ? "h6 text-center pl-2" : " h6 pl-2"}
                 onSelect={() => handleRoutes("/projects")}
-                style={"/projects" === location.pathname ? {background: "#f06000", color: "#fff"} : null}
-                isSelected={"/projects" === location.pathname}
+                style={String(location.pathname).includes("/projects") ? {background: "#f06000", color: "#fff"} : null}
+                isSelected={"/projects" === location.pathname || "/projects/:id" === location.pathname}
                 aria-controls={`panel-${"/projects"}`}
             >
                 <MDBIcon icon="project-diagram" size="lg" className="mr-3"/>

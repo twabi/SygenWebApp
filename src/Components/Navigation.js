@@ -9,6 +9,7 @@ import Home from "./Pages/Home";
 import Users from "./Pages/Users";
 import Projects from "./Pages/Projects";
 import Tasks from "./Pages/Tasks";
+import ProjectDetails from "./Pages/ProjectDetails";
 
 const Navigation = () => {
 
@@ -33,6 +34,9 @@ const Navigation = () => {
 
                 <Route path="/projects" render={(props) => (
                     <Projects {...props} />)} exact />
+
+                <Route path="/projects/:id" render={(props) => (
+                    <ProjectDetails {...props} />)} exact />
 
                 <Route path="/tasks" render={(props) => (
                     <Tasks {...props} />)} exact />

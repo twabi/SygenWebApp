@@ -16,12 +16,12 @@ const LogIn = () => {
     const history = useHistory();
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
-   const [
+    const [
         signInWithEmailAndPassword,
         user,
         loading,
         error,
-    ] = useSignInWithEmailAndPassword(Firebase.auth());
+        ] = useSignInWithEmailAndPassword(Firebase.auth());
 
     const [showLoading, setShowLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -48,7 +48,6 @@ const LogIn = () => {
     useEffect(() => {
         if(user){
             gotoHome();
-
         }
 
         if(error){
@@ -142,7 +141,6 @@ const LogIn = () => {
             </MDBBox>
         </div>
     )
-
 
 }
 export default LogIn;
