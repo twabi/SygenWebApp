@@ -4,7 +4,7 @@ import {Button} from "evergreen-ui";
 import {MDBAlert} from "mdbreact";
 
 import{ init } from 'emailjs-com';
-import FireFetch from "../../FireFetch";
+import FireFetch from "../../Firebase/FireFetch";
 init("user_2JD2DZg8xAHDW7e9kdorr");
 
 

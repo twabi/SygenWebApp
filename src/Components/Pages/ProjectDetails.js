@@ -6,7 +6,7 @@ import {MDBAlert, MDBBox, MDBCol, MDBRow} from "mdbreact";
 import {Text} from "react-font";
 import {useParams} from "react-router";
 import {useListVals, useObject} from "react-firebase-hooks/database";
-import Firebase from "../Firebase";
+import Firebase from "../Firebase/Firebase";
 import {AddIcon, Badge, Button, DeleteIcon, Dialog, EditIcon, PrintIcon, TrashIcon} from "evergreen-ui";
 import {deleteProject, showEditModal} from "./Projects";
 import EditProjectModal from "../Modals/Projects/EditProjectModal";
@@ -14,8 +14,8 @@ import CreateTaskModal from "../Modals/Tasks/CreateTaskModal";
 import EditTaskModal from "../Modals/Tasks/EditTaskModal";
 import {deleteTask, handleEdit} from "./Tasks";
 import AddUserLayout from "../Modals/Projects/AddUser";
-import FireFetch from "../FireFetch";
-import Gantt, {exportPDF} from "../Gantt";
+import FireFetch from "../Firebase/FireFetch";
+import Gantt, {exportPDF} from "../Charts/Gantt";
 
 
 const { Content } = Layout;

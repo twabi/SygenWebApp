@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {DatePicker, Form, Input, Select} from "antd";
 import {Button} from "evergreen-ui";
-import FireFetch from "../../FireFetch";
+import FireFetch from "../../Firebase/FireFetch";
 import {MDBAlert} from "mdbreact";
-import Firebase from "../../Firebase";
+import Firebase from "../../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
 
 

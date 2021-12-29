@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Chart } from "react-google-charts";
-import Firebase from "./Firebase";
+import Firebase from "../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
 import {MDBAlert} from "mdbreact";
 import "jspdf-autotable";

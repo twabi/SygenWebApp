@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 import {MDBAlert, MDBCol, MDBRow} from "mdbreact";
 import {Button} from "evergreen-ui";
 import {Form, Input, Select} from "antd";
-import Firebase from "../../Firebase";
+import Firebase from "../../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
-import FireFetch from "../../FireFetch";
+import FireFetch from "../../Firebase/FireFetch";
 
 const userRef = Firebase.database().ref('System/Users');
 const AddUserLayout = (props) => {

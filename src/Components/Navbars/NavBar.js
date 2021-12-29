@@ -4,7 +4,7 @@ import {
     MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem,
 } from "mdbreact";
 import {Avatar, Switch} from "antd";
-import Firebase from "../Firebase";
+import Firebase from "../Firebase/Firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useListVals} from "react-firebase-hooks/database";
 import {Dialog} from "evergreen-ui";

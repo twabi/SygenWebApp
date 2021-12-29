@@ -14,10 +14,10 @@ import {
 import {Text} from "react-font";
 import CreateUserModal from "../Modals/User/CreateUserModal";
 import { useList, useListVals } from 'react-firebase-hooks/database';
-import Firebase from "../Firebase";
+import Firebase from "../Firebase/Firebase";
 import EditUserModal from "../Modals/User/EditUserModal";
 import ViewUserModal from "../Modals/User/ViewUserModal";
-import FireFetch from "../FireFetch";
+import FireFetch from "../Firebase/FireFetch";
 import {useAuthState} from "react-firebase-hooks/auth";
 import { useHistory } from 'react-router-dom';
 

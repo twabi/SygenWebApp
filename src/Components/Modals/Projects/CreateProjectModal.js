@@ -3,9 +3,9 @@ import {DatePicker, Form, Input, Select} from "antd";
 import {Button} from "evergreen-ui";
 import {MDBAlert} from "mdbreact";
 import {useAuthState} from "react-firebase-hooks/auth";
-import Firebase from "../../Firebase";
+import Firebase from "../../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
-import FireFetch from "../../FireFetch";
+import FireFetch from "../../Firebase/FireFetch";
 
 
 const userRef = Firebase.database().ref('System/Users');

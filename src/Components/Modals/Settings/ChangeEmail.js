@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {MDBAlert} from "mdbreact";
-import Firebase from "../../Firebase";
+import Firebase from "../../Firebase/Firebase";
 import {
     MDBCol, MDBRow, MDBModalBody,
 } from "mdbreact";

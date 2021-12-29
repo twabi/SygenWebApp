@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {DatePicker, Form, Input, Select} from "antd";
-import Firebase from "../../Firebase";
+import Firebase from "../../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
 
 

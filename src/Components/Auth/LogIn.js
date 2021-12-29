@@ -5,7 +5,7 @@ import logo from "../../sygenlogo.png";
 import 'mdbreact/dist/css/mdb.css';
 import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
-import Firebase from '../Firebase';
+import Firebase from '../Firebase/Firebase';
 import { Input } from 'antd';
 import {LockOutlined, MailOutlined} from '@ant-design/icons';
 import {useSignInWithEmailAndPassword} from "react-firebase-hooks/auth";

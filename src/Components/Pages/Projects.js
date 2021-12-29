@@ -17,10 +17,10 @@ import {
 } from "mdbreact";
 import {Alert} from 'antd';
 import {useListVals} from "react-firebase-hooks/database";
-import Firebase from "../Firebase";
+import Firebase from "../Firebase/Firebase";
 import CreateProjectModal from "../Modals/Projects/CreateProjectModal";
 import EditProjectModal from "../Modals/Projects/EditProjectModal";
-import FireFetch from "../FireFetch";
+import FireFetch from "../Firebase/FireFetch";
 import {useHistory} from "react-router-dom";
 import {generatePath} from "react-router";
 

@@ -11,7 +11,7 @@ import logo from "../../sygenlogo.png";
 import sygenImage from "../../sygen-model.png";
 import {Button, Input} from "antd";
 import {useHistory} from 'react-router-dom';
-import Firebase from "../Firebase";
+import Firebase from "../Firebase/Firebase";
 import {MailOutlined} from "@ant-design/icons";
 
 

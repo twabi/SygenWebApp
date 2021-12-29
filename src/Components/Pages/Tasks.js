@@ -16,10 +16,10 @@ import {
 } from "mdbreact";
 import {Text} from "react-font";
 import { useListVals } from 'react-firebase-hooks/database';
-import Firebase from "../Firebase";
+import Firebase from "../Firebase/Firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
 import CreateTaskModal from "../Modals/Tasks/CreateTaskModal";
-import FireFetch from "../FireFetch";
+import FireFetch from "../Firebase/FireFetch";
 import EditTaskModal from "../Modals/Tasks/EditTaskModal";
 import ViewTaskModal from "../Modals/Tasks/ViewTaskModal";
 

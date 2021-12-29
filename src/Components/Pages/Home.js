@@ -5,8 +5,11 @@ import SideBar from "../Navbars/SideBar";
 import {MDBBox, MDBCol, MDBRow} from "mdbreact";
 import { MDBCard, MDBCardText } from 'mdbreact';
 import {Text} from "react-font";
-import Firebase from "../Firebase";
+import Firebase from "../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
+import {LineChart} from "../Charts/LineChart";
+import {PieChart} from "../Charts/PieChart";
+import {BarChart} from "../Charts/BarChart";
 
 
 const userRef = Firebase.database().ref('System/Users');
@@ -128,33 +131,6 @@ const Home = () => {
 
                                     <MDBRow>
 
-                                        <MDBCol md={12}>
-                                            <MDBRow className="w-100">
-                                                <Card className="mt-2 w-100">
-                                                    <MDBRow className="d-flex align-items-center">
-                                                        <MDBCol>
-                                                            <div className="d-block ml-3">
-                                                                <h6 className="font-weight-bold">
-                                                                    <Text family='Nunito'>
-                                                                        Number of Outlets Created
-                                                                    </Text>
-                                                                </h6>
-                                                            </div>
-                                                            {/*<img src={program} className="img-fluid float-left p-4 mt-2" width={220} height={220} alt="" />*/}
-                                                        </MDBCol>
-
-                                                    </MDBRow>
-                                                    <hr/>
-                                                    <MDBRow>
-                                                        <Card bordered={false} className="w-100 bg-white">
-                                                        </Card>
-
-                                                    </MDBRow>
-
-                                                </Card>
-                                            </MDBRow>
-
-                                        </MDBCol>
                                         <MDBCol md={6}>
                                             <MDBRow className="w-100">
                                                 <Card className="mt-2 w-100">
@@ -163,7 +139,7 @@ const Home = () => {
                                                             <div className="d-block ml-3">
                                                                 <h6 className="font-weight-bold">
                                                                     <Text family='Nunito'>
-                                                                        Most Sold Product (Sales)
+                                                                        Task Completion Rate
                                                                     </Text>
                                                                 </h6>
                                                             </div>
@@ -174,6 +150,7 @@ const Home = () => {
                                                     <hr/>
                                                     <MDBRow>
                                                         <Card bordered={false} className="w-100 bg-white">
+                                                            <LineChart/>
                                                         </Card>
 
                                                     </MDBRow>
@@ -189,7 +166,7 @@ const Home = () => {
                                                             <div className="d-block ml-3">
                                                                 <h6 className="font-weight-bold">
                                                                     <Text family='Nunito'>
-                                                                        Quantities Sold (Units)
+                                                                        Projects Per Member
                                                                     </Text>
                                                                 </h6>
                                                             </div>
@@ -200,6 +177,7 @@ const Home = () => {
                                                     <hr/>
                                                     <MDBRow>
                                                         <Card bordered={false} className="w-100 bg-white">
+                                                            <PieChart/>
                                                         </Card>
 
                                                     </MDBRow>
@@ -207,7 +185,7 @@ const Home = () => {
                                                 </Card>
                                             </MDBRow>
                                         </MDBCol>
-                                        <MDBCol md={12}>
+                                        <MDBCol md={6}>
                                             <MDBRow className="w-100">
                                                 <Card className="mt-2 w-100">
                                                     <MDBRow>
@@ -215,7 +193,7 @@ const Home = () => {
                                                             <div className="d-block ml-3">
                                                                 <h6 className="font-weight-bold">
                                                                     <Text family='Nunito'>
-                                                                        Employee Sales
+                                                                        Total Revenue Per project
                                                                     </Text>
                                                                 </h6>
                                                             </div>
@@ -226,15 +204,15 @@ const Home = () => {
                                                     <hr/>
                                                     <MDBRow>
                                                         <Card bordered={false} className="w-100 bg-white">
+                                                            <BarChart/>
                                                         </Card>
 
                                                     </MDBRow>
 
                                                 </Card>
                                             </MDBRow>
-
                                         </MDBCol>
-                                        <MDBCol md={12}>
+                                        <MDBCol md={6}>
                                             <MDBRow className="w-100">
                                                 <Card className="mt-2 w-100">
                                                     <MDBRow>
@@ -242,7 +220,7 @@ const Home = () => {
                                                             <div className="d-block ml-3">
                                                                 <h6 className="font-weight-bold">
                                                                     <Text family='Nunito'>
-                                                                        Products Sold
+                                                                        Projects Created (Per Month)
                                                                     </Text>
                                                                 </h6>
                                                             </div>
@@ -253,14 +231,15 @@ const Home = () => {
                                                     <hr/>
                                                     <MDBRow>
                                                         <Card bordered={false} className="w-100 bg-white">
+                                                            <LineChart/>
                                                         </Card>
 
                                                     </MDBRow>
 
                                                 </Card>
                                             </MDBRow>
-
                                         </MDBCol>
+
                                     </MDBRow>
 
                                 </Card>
