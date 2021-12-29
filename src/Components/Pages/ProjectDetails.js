@@ -93,7 +93,7 @@ const ProjectDetails = () => {
                             hasFooter={false}>
 
                             <MDBCol md={12}>
-                                <CreateTaskModal modal={setShowModal}/>
+                                <CreateTaskModal projectID={id} modal={setShowModal}/>
                             </MDBCol>
 
                         </Dialog>
@@ -214,7 +214,7 @@ const ProjectDetails = () => {
                                                     <div className="d-block ml-1">
                                                         <h3 className="font-weight-bold">
                                                             <Text family='Nunito'>
-                                                                Project Tasks
+                                                                Project Tasks ({taskArray&&taskArray.length})
                                                             </Text>
                                                         </h3>
                                                     </div>

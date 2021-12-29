@@ -50,13 +50,17 @@ const CreateTaskModal = (props) => {
     }
 
     useEffect(() => {
+        console.log(props.projectID);
+        if(props.projectID){
+            setSelectedProject(props.projectID);
+        }
         if(loggedInUser){
             var userId = users[users.findIndex(x => (x.email) === loggedInUser.email)]
                 &&users[users.findIndex(x => (x.email) === loggedInUser.email)].userID
             setCreatedByID(userId);
         }
 
-    }, [loggedInUser, users])
+    }, [loggedInUser, props.projectID, users])
 
 
 
@@ -137,6 +141,10 @@ const CreateTaskModal = (props) => {
                 layout="vertical"
                 onFinish={addTask}
                 onFinishFailed={onFinishFailed}
+                fields={[{
+                        name: ["project"],
+                        value: selectedProject,
+                    }]}
             >
 
                 <Form.Item label="Title"
