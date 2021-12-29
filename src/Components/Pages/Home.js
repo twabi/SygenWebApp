@@ -5,8 +5,13 @@ import SideBar from "../Navbars/SideBar";
 import {MDBBox, MDBCol, MDBRow} from "mdbreact";
 import { MDBCard, MDBCardText } from 'mdbreact';
 import {Text} from "react-font";
+import Firebase from "../Firebase";
+import {useListVals} from "react-firebase-hooks/database";
 
 
+const userRef = Firebase.database().ref('System/Users');
+const taskRef = Firebase.database().ref('System/Tasks');
+const projRef = Firebase.database().ref('System/Projects');
 const { Content } = Layout;
 const Home = () => {
 
@@ -14,6 +19,10 @@ const Home = () => {
     const callback = (data) => {
         setCheckedData(data);
     }
+
+    const [users] = useListVals(userRef);
+    const [tasks] = useListVals(taskRef);
+    const [projects] = useListVals(projRef);
 
     return (
         <>
@@ -53,7 +62,7 @@ const Home = () => {
                                                                     <Text family='Nunito'  className="font-weight-bolder h5">Team Members</Text>
                                                                 </span>
                                                             <h2 className="font-weight-bolder">
-                                                                <Text family='Alfa Slab One' className="deep-orange-text font-weight-bolder">{4}</Text>
+                                                                <Text family='Alfa Slab One' className="deep-orange-text font-weight-bolder">{users&&users.length}</Text>
                                                             </h2>
 
                                                         </MDBCard>
@@ -64,7 +73,7 @@ const Home = () => {
                                                                     <Text family='Nunito'  className="font-weight-bolder h5">Ongoing Projects</Text>
                                                                 </span>
                                                             <h2 className="font-weight-bolder deep-orange-text">
-                                                                <Text family='Alfa Slab One'>{5}</Text>
+                                                                <Text family='Alfa Slab One'>{projects&&projects.filter(x => x.status === "Ongoing").length}</Text>
                                                             </h2>
                                                         </MDBCard>
                                                     </MDBCol>
@@ -74,7 +83,7 @@ const Home = () => {
                                                                     <Text family='Nunito' className="font-weight-bolder h5">Pending Tasks</Text>
                                                                 </span>
                                                             <h2 className="font-weight-bolder deep-orange-text">
-                                                                <Text family='Alfa Slab One'>{87}</Text>
+                                                                <Text family='Alfa Slab One'>{tasks&&tasks.filter(x => x.taskStatus === "Ongoing" || x.taskStatus === "Incomplete").length}</Text>
                                                             </h2>
                                                         </MDBCard>
                                                     </MDBCol>
@@ -84,7 +93,7 @@ const Home = () => {
                                                                     <Text family='Nunito' className="font-weight-bolder h5">Projects Done</Text>
                                                                 </span>
                                                             <h2 className="font-weight-bolder deep-orange-text">
-                                                                <Text family='Alfa Slab One'><strong>{25}</strong></Text>
+                                                                <Text family='Alfa Slab One'><strong>{projects&&projects.filter(x => x.status === "Completed").length}</strong></Text>
                                                             </h2>
                                                         </MDBCard>
                                                     </MDBCol>
