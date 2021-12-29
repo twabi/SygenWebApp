@@ -229,7 +229,7 @@ const CreateProjectModal = (props) => {
                                 optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                             }
                             onChange={changeStatus}>
-                        {["Ongoing", "Completed", "To Do"].map((item, index) => (
+                        {["Ongoing", "Completed (In-Production)", "To Do (Planning)"].map((item, index) => (
                             <Select.Option key={index}  value={item}>{item}</Select.Option>
                         ))}
 

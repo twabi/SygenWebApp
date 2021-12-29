@@ -64,14 +64,14 @@ const TabList = (props) => {
             <Menu.Item
                 key="/projects"
                 id="/projects"
-                className={collapsed ? "h6 text-center pl-2" : " h6 pl-2"}
+                className={collapsed ? "h6 text-center pl-2" : "h6 pl-2"}
                 onSelect={() => handleRoutes("/projects")}
                 style={String(location.pathname).includes("/projects") ? {background: "#f06000", color: "#fff"} : null}
                 isSelected={"/projects" === location.pathname || "/projects/:id" === location.pathname}
                 aria-controls={`panel-${"/projects"}`}
             >
                 <MDBIcon icon="project-diagram" size="lg" className="mr-3"/>
-                {collapsed? null : <Heading className="d-inline" size={500}><Text className={"/projects" === location.pathname ? "d-inline text-white" : "d-inline"} family='Nunito'>Projects</Text></Heading>}
+                {collapsed? null : <Heading className="d-inline" size={500}><Text className={String(location.pathname).includes("/projects") ? "d-inline text-white" : "d-inline"} family='Nunito'>Projects</Text></Heading>}
             </Menu.Item>
 
             <Menu.Item

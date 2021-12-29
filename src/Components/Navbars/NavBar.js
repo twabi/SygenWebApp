@@ -3,7 +3,7 @@ import {
     MDBNavbar, MDBNavbarNav, MDBNavItem, MDBDropdown,
     MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem,
 } from "mdbreact";
-import {Switch} from "antd";
+import {Avatar, Switch} from "antd";
 import holder from "../../holder.jpg";
 import Firebase from "../Firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -64,13 +64,16 @@ const NavBar = (props) => {
             <MDBNavbarNav left>
                 <Switch checked={checked} style={{background: "#f06000"}} onChange={onChange} />
             </MDBNavbarNav>
-            <MDBNavbarNav right>
-                <MDBNavItem>
-                    <MDBDropdown className="mx-2 mr-4">
+            <MDBNavbarNav right className="">
+                <MDBNavItem className="d-flex justify-content-center align-items-center">
+                    <Avatar className="rounded float-left d-inline" shape="round"
+                            style={{ backgroundColor: "#f06000", verticalAlign: 'middle' }} size="small" gap={1}>
+                        {userName[0]}
+                    </Avatar>
+                    <MDBDropdown className="mr-4">
                         <MDBDropdownToggle nav caret>
                             <div  className="d-inline" >
                                 <p className="d-inline mx-1">{userName}</p>
-                                {<img style={{width:"1.5rem", height:"1.5rem"}} src={holder} className="rounded mx-2 float-left d-inline" alt="aligment" />}
                             </div>
                         </MDBDropdownToggle>
                         <MDBDropdownMenu className="dropdown-default">
