@@ -27,7 +27,6 @@ const { Content } = Layout;
 const outletsRef = Firebase.database().ref('System/Outlets');
 const usersRef = Firebase.database().ref('System/Users');
 const taskRef = Firebase.database().ref('System/Tasks');
-var storageRef = Firebase.storage().ref("System/Tasks");
 const moment = require("moment");
 
 const Tasks = () => {

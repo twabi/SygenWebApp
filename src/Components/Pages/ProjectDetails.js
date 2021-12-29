@@ -15,7 +15,7 @@ import EditTaskModal from "../Modals/Tasks/EditTaskModal";
 import {deleteTask, handleEdit} from "./Tasks";
 import AddUserLayout from "../Modals/Projects/AddUser";
 import FireFetch from "../FireFetch";
-import Gantt from "../Gantt";
+import Gantt, {exportPDF} from "../Gantt";
 
 
 const { Content } = Layout;
@@ -46,6 +46,7 @@ const ProjectDetails = () => {
     const [memberArray, setMemberArray] = useState([]);
     const [memberLoading, setMemberLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [caller, setCaller] = useState(false)
 
 
     const callback = (data) => {
@@ -395,7 +396,7 @@ const ProjectDetails = () => {
                                                     </div>
                                                 </MDBCol>
                                                 <MDBCol>
-                                                    <Button type="primary" className="mx-1" onClick={() => {}}>
+                                                    <Button type="primary" className="mx-1" onClick={() => {setCaller(true)}}>
                                                         <PrintIcon color="info"/>
                                                     </Button>
                                                 </MDBCol>
@@ -403,7 +404,7 @@ const ProjectDetails = () => {
                                             <hr/>
                                             <MDBRow>
                                                 <Card bordered={false} className="w-100 bg-white">
-                                                    <Gantt projectID={id}/>
+                                                    <Gantt callback={caller} call={setCaller} projectID={id}/>
                                                 </Card>
 
                                             </MDBRow>
