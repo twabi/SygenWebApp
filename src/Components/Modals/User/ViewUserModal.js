@@ -8,7 +8,6 @@ const moment = require("moment");
 const ViewUserModal = (props) => {
 
     const [user, setUser] = useState(props.editUser)
-    const [DOB, setDOB] = useState(null);
     const [gender, setGender] = useState(null);
     const [role, setRole] = useState(null);
 
@@ -17,7 +16,6 @@ const ViewUserModal = (props) => {
     useEffect(() => {
         setUser(props.editUser);
         setGender(props.editUser.gender);
-        setDOB(props.editUser.dob);
         setRole(props.editUser.role);
     }, [props.editUser])
 
@@ -40,16 +38,6 @@ const ViewUserModal = (props) => {
                 </Form.Item>
                 <Form.Item label="Phone">
                     <Input type="phone" disabled={true} defaultValue={user.phone} placeholder="enter user phone number" id="phone"/>
-                </Form.Item>
-                <Form.Item
-                    label="Select Date of Birth">
-                    <DatePicker
-                        placeholder="select starting date"
-                        picker={"date"}
-                        value={!DOB ? undefined : moment(DOB, "YYYY-MM-DD")}
-                        className="w-100"
-                        disabled={true}/>
-
                 </Form.Item>
 
                 <Form.Item label="Gender">

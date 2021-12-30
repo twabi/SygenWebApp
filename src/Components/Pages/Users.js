@@ -232,17 +232,6 @@ const Users = () => {
                                     title={
                                         <div className="w-100 d-flex justify-content-between">
                                             <b>View User</b>
-                                            <div className="mr-2">
-                                                <Tooltip placement="bottom" title="Employee Sales">
-                                                    <IconButton icon={DollarIcon} intent="success" className="mr-1" onClick={() => {
-                                                        editUser.role === "Admin" ? alert("User is not a sales rep") :
-                                                            history.push({
-                                                                pathname: '/sales',
-                                                                filter: editUser.firstname + " " + editUser.surname,
-                                                            });
-                                                    }}/>
-                                                </Tooltip>
-                                            </div>
                                         </div>
                                     }
                                     onCloseComplete={() => {setViewModal(false)}}
