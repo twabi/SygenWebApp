@@ -102,6 +102,12 @@ const CreateTaskModal = (props) => {
                 setColor("success");
                 setShowAlert(true);
 
+                var assigner = users[users.findIndex(x => (x.userID) === createdByID)]&&
+                    users[users.findIndex(x => (x.userID) === createdByID)].firstname + " " +
+                    users[users.findIndex(x => (x.userID) === createdByID)].surname
+                var projectName = projects[projects.findIndex(x => (x.projectID) === values.project)]&&
+                    projects[projects.findIndex(x => (x.projectID) === values.project)].name;
+
                 values.assigned.map((itemUser) => {
                     var userName = users[users.findIndex(x => (x.userID) === itemUser)]&&
                         users[users.findIndex(x => (x.userID) === itemUser)].firstname + " " +
@@ -110,6 +116,8 @@ const CreateTaskModal = (props) => {
                     var userEmail = users[users.findIndex(x => (x.userID) === itemUser)]&&
                         users[users.findIndex(x => (x.userID) === itemUser)].email
                     var templateParams = {
+                        projectname: projectName,
+                        assigner: assigner,
                         userEmail: userEmail,
                         username: userName,
                     };
