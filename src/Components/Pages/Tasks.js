@@ -24,7 +24,7 @@ import EditTaskModal from "../Modals/Tasks/EditTaskModal";
 import ViewTaskModal from "../Modals/Tasks/ViewTaskModal";
 
 const { Content } = Layout;
-const outletsRef = Firebase.database().ref('System/Outlets');
+const projRef = Firebase.database().ref('System/Projects');
 const usersRef = Firebase.database().ref('System/Users');
 const taskRef = Firebase.database().ref('System/Tasks');
 const moment = require("moment");
@@ -40,6 +40,10 @@ const Tasks = () => {
             title: 'Title',
             dataIndex: 'title',
             key: 'title',
+        },{
+            title: 'Project',
+            dataIndex: 'project',
+            key: 'project',
         },
         {
             title: 'Task Type',
@@ -73,7 +77,7 @@ const Tasks = () => {
     const callback = (data) => {
         setCheckedData(data);
     }
-    const [outlets] = useListVals(outletsRef);
+    const [projects] = useListVals(projRef);
     const [users] = useListVals(usersRef);
     const [tasks, loading] = useListVals(taskRef);
     const [loggedInUser] = useAuthState(Firebase.auth());
@@ -100,11 +104,14 @@ const Tasks = () => {
                     var now = moment();
                     var deadline = moment(task.deadline, "YYYY-MM-DDTh:mm").format("DD MMM YYYY");
                     var dateAssigned = moment(task.dateCreated, "YYYY-MM-DDTh:mm").format("DD MMM YYYY");
+                    var projectName = projects[projects.findIndex(x => (x.projectID) === task.projectID)]&&
+                        projects[projects.findIndex(x => (x.projectID) === task.projectID)].name;
 
                     tempArray.push({
                         key: index + 1,
                         title: task.title,
                         type: task.taskType,
+                        project: projectName,
                         status: <Badge color={task.taskStatus === "Complete" ? "green" : "neutral"}>{task.taskStatus}</Badge>,
                         deadline : <Badge color={now.isBefore(deadline) ? "green" : "neutral"}>{deadline}</Badge>,
                         date : dateAssigned,
@@ -139,14 +146,15 @@ const Tasks = () => {
             //window.location.href = "/login";
         }
 
-    }, [loggedInUser, outlets, tasks, users])
+    }, [loggedInUser, projects, tasks, users])
 
 
     const handleSearch = searchText => {
-        const filteredEvents = taskArray.filter(({ title, type, location }) => {
+        const filteredEvents = taskArray.filter(({ title, type, project }) => {
             title = title.toLowerCase();
             type = type.toLowerCase();
-            return title.includes(searchText) || type.includes(searchText);
+            project = project.toLowerCase();
+            return title.includes(searchText) || type.includes(searchText) || project.includes(searchText);
         });
 
         setDataArray(filteredEvents);
@@ -234,7 +242,7 @@ const Tasks = () => {
                                             </div>
 
                                             <div className="ml-1 d-flex flex-row align-items-center w-100">
-                                                <SearchInput height={40} placeholder="Search tasks(type, location, user)" className="w-100"   onChange={e => handleSearch(e.target.value)} />
+                                                <SearchInput height={40} width={window.innerWidth /4} placeholder="Search tasks(type, project, status)" className="w-100" onChange={e => handleSearch(e.target.value)} />
                                                 <Button height={40} appearance="primary"
                                                         style={{background: "#f06000", borderColor: "#f06000", color: "#fff"}}
                                                         className="mx-2" onClick={() => {setShowModal(true)}}>

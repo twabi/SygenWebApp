@@ -33,3 +33,7 @@ code {
   overflow-x: auto;
 }
 
+.cardScroll {
+  height: 800px;
+  overflow-y: auto;
+}

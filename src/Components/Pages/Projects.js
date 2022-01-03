@@ -126,7 +126,7 @@ const Projects = () => {
                                             </div>
 
                                             <MDBRow className="ml-1">
-                                                <SearchInput height={40} placeholder="Search projects" className="w-100"
+                                                <SearchInput height={40} width={window.innerWidth/4} placeholder="Search projects" className="w-100"
                                                              onChange={e => handleSearch(e.target.value)} />
                                                 <Button height={40} appearance="primary"
                                                         style={{background: "#f06000", borderColor: "#f06000", color: "#fff"}}
@@ -148,7 +148,7 @@ const Projects = () => {
                                             </MDBAlert>
                                         </>
                                         : null }
-                                    <Card className="d-flex flex-column">
+                                    <Card className="d-flex flex-column cardScroll">
                                         <>
                                             <MDBRow>
                                                 <MDBCol>
