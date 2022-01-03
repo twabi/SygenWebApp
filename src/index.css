@@ -28,3 +28,8 @@ code {
   overflow-y: auto;
 }
 
+.ganttscroll {
+  overflow-y: auto;
+  overflow-x: auto;
+}
+

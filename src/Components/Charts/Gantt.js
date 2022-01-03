@@ -63,9 +63,7 @@ const Gantt = (props) => {
 
     const ganttData = [columns, ...rows];
     const options = {
-        gantt: {
-            trackHeight: 50,
-        },
+        trackHeight: 50,
     };
 
     
@@ -106,10 +104,9 @@ const Gantt = (props) => {
                 </>
                 : null }
             <Chart
-
                 chartType="Gantt"
+                className="ganttscroll"
                 width="100%"
-                height="100%"
                 data={ganttData}
                 options={options}
             />
