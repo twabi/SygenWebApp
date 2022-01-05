@@ -26,23 +26,29 @@ const EditProjectModal = (props) => {
     const [membersAssigned, setMembersAssigned] = useState([]);
 
     function onChangeOne(date, dateString) {
+        selectedProject.startDate = dateString;
         setStartDate(dateString);
     }
     function changeAssigned(assigned) {
+        selectedProject.members = assigned;
         setMembersAssigned(assigned);
     }
 
     function onChangeTwo(date, dateString) {
+        selectedProject.endDate = dateString;
         setEndDate(dateString);
     }
     function changeType(type) {
+        selectedProject.type = type;
         setType(type);
     }
     function changeStatus(status) {
+        selectedProject.status = status;
         setStatus(status);
     }
 
     function changePaymentType(type){
+        selectedProject.paymentType = type;
         setPaymentType(type);
     }
 
@@ -62,7 +68,7 @@ const EditProjectModal = (props) => {
             "name" : result.name,
             "description" : result.description,
             "startDate" : moment(result.startDate).format("YYYY-MM-DD") ? moment(result.startDate).format("YYYY-MM-DD") : null,
-            "endDate" : moment(result.endDate).format("YYYY-MM-DD"),
+            "endDate" : moment(result.endDate).format("YYYY-MM-DD") ? moment(result.endDate).format("YYYY-MM-DD") : null,
             "type" : result.type,
             "paymentType" : result.paymentType ? result.paymentType : "",
             "amount" : result.amount ? result.amount : "",
@@ -107,7 +113,7 @@ const EditProjectModal = (props) => {
                     {name: ["name"], value: selectedProject.name},
                     {name: ["description"], value: selectedProject.description},
                     {name: ["startDate"], value: !selectedProject.startDate ? undefined : moment(selectedProject.startDate, "YYYY-MM-DD")},
-                    {name: ["endDate"], value: !selectedProject.endDate ? undefined : moment(selectedProject.startDate, "YYYY-MM-DD")},
+                    {name: ["endDate"], value: !selectedProject.endDate ? undefined : moment(selectedProject.endDate, "YYYY-MM-DD")},
                     {name: ["type"], value: selectedProject.type},
                     {name: ["paymentType"], value: selectedProject.paymentType},
                     {name: ["amount"], value: selectedProject.amount},
@@ -119,12 +125,14 @@ const EditProjectModal = (props) => {
                            name="name"
                            rules={[{ required: true, message: 'Please input outlet name!' }]}>
                     <Input placeholder="enter outlet name" //defaultValue={selectedProject.name}
+                           onChange={(e)=>{selectedProject.name = e.target.value;}}
                            id="name"/>
                 </Form.Item>
                 <Form.Item label="Project Description"
                            name="description"
                            rules={[]}>
                     <Input placeholder="enter project description" //defaultValue={selectedProject.description}
+                           onChange={(e)=>{selectedProject.description = e.target.value;}}
                            id="desc"/>
                 </Form.Item>
 
@@ -202,6 +210,7 @@ const EditProjectModal = (props) => {
                            name="amount"
                            rules={[]}>
                     <Input type="number" placeholder="enter payment amount" //defaultValue={selectedProject.amount}
+                           onChange={(e)=>{selectedProject.amount = e.target.value;}}
                            id="amount"/>
 
                 </Form.Item>
