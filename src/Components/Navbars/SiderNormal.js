@@ -70,7 +70,7 @@ const SiderNormal = (props) => {
         >
             <div>
                 <SidebarHeader>
-                    <div className="d-flex justify-content-center p-2">
+                    <div className="d-flex justify-content-left ml-1 p-2">
                         <div className="logo border-bottom border-light">
                             {collapsed ?
                                 <>
@@ -78,7 +78,7 @@ const SiderNormal = (props) => {
                                 </>
                                 :
                                 <>
-                                    <img  src={logo} style={{height:"8rem"}} className="rounded w-100" alt="aligment" />
+                                    <img  src={logo} style={{height:"6rem"}} className="rounded w-100" alt="aligment" />
                                 </>
 
                             }
