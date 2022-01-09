@@ -60,7 +60,10 @@ const Projects = () => {
 
     useEffect(() => {
         if(projects){
-            setDataArray([...projects]);
+            console.log(projects)
+            const sortedArray = projects.sort((a,b) => b.dateCreated.localeCompare(a.dateCreated))
+            console.log(sortedArray);
+            setDataArray(sortedArray);
         }
 
         if(error){
