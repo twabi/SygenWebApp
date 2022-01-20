@@ -40,7 +40,7 @@ const Gantt = (props) => {
         }
         if(tasks){
             var rowArray = [];
-           var tasksArray = tasks.filter(x => x.projectID === props.projectID);
+           var tasksArray = tasks.filter(x => (x.projectID === props.projectID)&&(x.taskStatus!=="Complete"));
            if(tasksArray.length === 0){
                setShowAlert(true);
            } else {
