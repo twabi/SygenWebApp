@@ -305,7 +305,7 @@ const ProjectDetails = () => {
                                                     <List
                                                         loading={taskLoading}
                                                         itemLayout="vertical"
-                                                        dataSource={taskArray}
+                                                        dataSource={taskArray.sort((a, b) => b.taskStatus.localeCompare(a.taskStatus))}
                                                         renderItem={item => (
                                                             <List.Item
                                                                 key={item.title}
