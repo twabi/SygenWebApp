@@ -241,7 +241,7 @@ const EditTaskModal = (props) => {
                                 optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                             }
                             onChange={changeStatus}>
-                        {["Incomplete", "Ongoing", "Complete", "Pending Further Info"].map((item, index) => (
+                        {["Incomplete", "Ongoing", "Pending Further Info"].map((item, index) => (
                             <Select.Option key={index}  value={item}>{item}</Select.Option>
                         ))}
 

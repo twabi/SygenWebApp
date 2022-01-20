@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Alert, Avatar, Card, Layout, List, Progress, Skeleton, Space} from 'antd';
 import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
-import {MDBAlert, MDBBox, MDBCol, MDBRow} from "mdbreact";
+import {MDBAlert, MDBBox, MDBCol, MDBIcon, MDBRow} from "mdbreact";
 import {Text} from "react-font";
 import {useParams} from "react-router";
 import {useListVals, useObject} from "react-firebase-hooks/database";
@@ -112,6 +112,32 @@ const ProjectDetails = () => {
             setColor("danger");
             setShowAlert(true);
         })
+    }
+
+    const handleClose = (id) => {
+        var timeStamp = moment().format("YYYY-MM-DDTh:mm:ss");
+        var object = {
+            closeDate: timeStamp,
+            taskStatus : "Complete",
+        }
+
+        const output = FireFetch.updateInDB("Tasks", id, object);
+        output.then((result) => {
+            console.log(result);
+            if(result === "success"){
+                setMessage("Task closed successfully");
+                setColor("success");
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 2000);
+
+            }
+        }).catch((error) => {
+            setMessage("Unable to edit task, an error occurred :: " + error);
+            setColor("danger");
+            setShowAlert(true);
+        });
     }
 
     return (
@@ -287,14 +313,18 @@ const ProjectDetails = () => {
                                                                     <Badge color={item.taskStatus === "Complete" ? "green" : "neutral"}>{item.taskStatus}</Badge>,
                                                                     <Badge color={now.isBefore(moment(item.deadline, "YYYY-MM-DDTh:mm").format("DD MMM YYYY")) ? "green" : "neutral"}>
                                                                         {moment(item.deadline, "YYYY-MM-DDTh:mm").format("DD MMM YYYY")}</Badge>,
-                                                                    <EditIcon onClick={ () => {handleEdit(item, setSelectedTask, setEditTaskModal)}} color="info"/>,
-                                                                    <TrashIcon color="danger" onClick={() => {
-                                                                        // eslint-disable-next-line no-restricted-globals
-                                                                        if (confirm("Are you sure you want to delete Task?")) {
-                                                                            deleteTask(item.taskID, setColor, setShowAlert, setMessage);
+                                                                    <MDBIcon icon="times-circle" className="red-text" size="2x" onClick={()=>{
+
+                                                                        if(item.taskStatus === "Complete"){
+                                                                            alert("Task is already completed");
+                                                                        } else {
+                                                                            // eslint-disable-next-line no-restricted-globals
+                                                                            if (confirm("Are you sure you want to close the task as complete?")) {
+                                                                                handleClose(item.taskID);
+                                                                            }
                                                                         }
-                                                                    }
-                                                                    }/>
+
+                                                                    }}/>
                                                                 ]}
                                                             >
                                                                 <List.Item.Meta
