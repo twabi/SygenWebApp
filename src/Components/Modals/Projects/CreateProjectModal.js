@@ -85,6 +85,7 @@ const CreateProjectModal = (props) => {
                 "paymentType" : result.paymentType ? result.paymentType : "",
                 "amount" : result.amount ? result.amount : "",
                 "status" : result.status,
+                "budget" : result.budget,
                 "dateCreated" : timeStamp,
                 "createdByID" : createdByID,
                 "projectID" : projectID,
@@ -188,6 +189,12 @@ const CreateProjectModal = (props) => {
                         ))}
 
                     </Select>
+                </Form.Item>
+
+                <Form.Item label="Enter project budget (If applicable)"
+                           name="budget"
+                           rules={[]}>
+                    <Input type="number" placeholder="enter budget amount" defaultValue={0} id="budget"/>
                 </Form.Item>
 
                 <Form.Item label="Payment Type"

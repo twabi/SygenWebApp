@@ -8,6 +8,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "antd/dist/antd.css";
 import 'semantic-ui-css/semantic.min.css'
+import "@material-tailwind/react/tailwind.css";
 import {BrowserRouter} from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 

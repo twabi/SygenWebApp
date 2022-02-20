@@ -73,6 +73,7 @@ const EditProjectModal = (props) => {
             "paymentType" : result.paymentType ? result.paymentType : "",
             "amount" : result.amount ? result.amount : "",
             "status" : result.status,
+            "budget" : result.budget,
             "members" : result.members
         };
 
@@ -184,6 +185,12 @@ const EditProjectModal = (props) => {
                         ))}
 
                     </Select>
+                </Form.Item>
+
+                <Form.Item label="Enter project budget (If applicable)"
+                           name="budget"
+                           rules={[]}>
+                    <Input.Number type="number" placeholder="enter budget amount" defaultValue={0} id="amount"/>
                 </Form.Item>
 
                 <Form.Item label="Payment Type"

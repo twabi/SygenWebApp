@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@fortawesome/fontawesome-free": "^5.15.3",
+    "@material-tailwind/react": "0.3.4",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
