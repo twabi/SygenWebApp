@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
-import {Card, Layout} from 'antd';
+import {Avatar, Card, Layout} from 'antd';
 import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
-import {MDBBox, MDBCol, MDBRow} from "mdbreact";
+import {MDBBox, MDBCol, MDBIcon, MDBRow} from "mdbreact";
 import { MDBCard, MDBCardText } from 'mdbreact';
 import {Text} from "react-font";
 import Firebase from "../Firebase/Firebase";
@@ -60,44 +60,117 @@ const Home = () => {
                                             <MDBRow>
                                                 <MDBRow className="w-100">
                                                     <MDBCol>
-                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100" style={{ height: "8rem" }}>
-                                                                <span>
-                                                                    <Text family='Nunito'  className="font-weight-bolder h5">Team Members</Text>
-                                                                </span>
-                                                            <h2 className="font-weight-bolder">
-                                                                <Text family='Alfa Slab One' className="deep-orange-text font-weight-bolder">{users&&users.length}</Text>
-                                                            </h2>
+                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100">
+                                                            <div className="d-flex flex-row">
+                                                                <div className="mr-2">
+                                                                    <MDBIcon icon="users" className="border rounded mb-0 white-text p-3"
+                                                                             style={{ backgroundColor: "#f06000", verticalAlign: 'middle' }} size="2x"/>
+                                                                </div>
+                                                                <div className="ml-2 w-100">
+                                                                    <div>
+                                                                        <Text family='Nunito'  className="font-weight-bolder h6 mb-2">Team Members</Text>
+                                                                    </div>
+                                                                    <div className="d-flex flex-row justify-content-between">
+                                                                        <Text family='Nunito'>Organization members: &nbsp;&nbsp;</Text>
+                                                                        <b className="font-weight-bolder">
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{users&&users.length}</Text>
+                                                                        </b>
+                                                                    </div>
+                                                                    <div className="d-flex flex-row justify-content-between">
+                                                                        <Text family='Nunito'>Interns: &nbsp;&nbsp;</Text>
+                                                                        <b className="font-weight-bolder text-right">
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{1}</Text>
+                                                                        </b>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
 
                                                         </MDBCard>
                                                     </MDBCol>
                                                     <MDBCol>
-                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100 " style={{height: "8rem" }}>
-                                                            <span>
-                                                                    <Text family='Nunito'  className="font-weight-bolder h5">Ongoing Projects</Text>
-                                                                </span>
-                                                            <h2 className="font-weight-bolder deep-orange-text">
-                                                                <Text family='Alfa Slab One'>{projects&&projects.filter(x => x.status === "Ongoing").length}</Text>
-                                                            </h2>
+                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100 ">
+                                                            <div className="d-flex flex-row">
+                                                                <div className="mr-2">
+                                                                    <MDBIcon icon="project-diagram" className="border rounded mb-0 white-text p-3"
+                                                                             style={{ backgroundColor: "#f06000", verticalAlign: 'middle' }} size="2x"/>
+                                                                </div>
+                                                                <div className="ml-2 w-100">
+                                                                    <div>
+                                                                        <Text family='Nunito'  className="font-weight-bolder h6 mb-2">Projects</Text>
+                                                                    </div>
+                                                                    <div className="d-flex flex-row justify-content-between">
+                                                                        <Text family='Nunito'>Ongoing: &nbsp;&nbsp;</Text>
+                                                                        <b className="font-weight-bolder">
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{projects&&projects.filter(x => x.status === "Ongoing").length}</Text>
+                                                                        </b>
+                                                                    </div>
+                                                                    <div className="d-flex flex-row justify-content-between">
+                                                                        <Text family='Nunito'>Completed: &nbsp;&nbsp;</Text>
+                                                                        <b className="font-weight-bolder text-right">
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{projects&&projects.filter(x => x.status === "Completed").length}</Text>
+                                                                        </b>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
                                                         </MDBCard>
                                                     </MDBCol>
                                                     <MDBCol>
-                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100" style={{ height: "8rem" }}>
-                                                            <span>
-                                                                    <Text family='Nunito' className="font-weight-bolder h5">Pending Tasks</Text>
-                                                                </span>
-                                                            <h2 className="font-weight-bolder deep-orange-text">
-                                                                <Text family='Alfa Slab One'>{tasks&&tasks.filter(x => x.taskStatus === "Ongoing" || x.taskStatus === "Incomplete").length}</Text>
-                                                            </h2>
+                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100">
+                                                            <div className="d-flex flex-row">
+                                                                <div className="mr-2">
+                                                                    <MDBIcon icon="tasks" className="border rounded mb-0 white-text p-3"
+                                                                             style={{ backgroundColor: "#f06000", verticalAlign: 'middle' }} size="2x"/>
+                                                                </div>
+                                                                <div className="ml-2 w-100">
+                                                                    <div>
+                                                                        <Text family='Nunito'  className="font-weight-bolder h6 mb-2">Tasks</Text>
+                                                                    </div>
+                                                                    <div className="d-flex flex-row justify-content-between">
+                                                                        <Text family='Nunito'>Incomplete: &nbsp;&nbsp;</Text>
+                                                                        <b className="font-weight-bolder">
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">
+                                                                                {tasks&&tasks.filter(x => x.taskStatus === "Ongoing" || x.taskStatus === "Incomplete" || x.taskStatus === "Pending Further Info").length}</Text>
+                                                                        </b>
+                                                                    </div>
+                                                                    <div className="d-flex flex-row justify-content-between">
+                                                                        <Text family='Nunito'>Completed: &nbsp;&nbsp;</Text>
+                                                                        <b className="font-weight-bolder text-right">
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{tasks&&tasks.filter(x => x.taskStatus === "Complete").length}</Text>
+                                                                        </b>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
                                                         </MDBCard>
                                                     </MDBCol>
                                                     <MDBCol>
-                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100 " style={{ height: "8rem" }}>
-                                                            <span>
-                                                                    <Text family='Nunito' className="font-weight-bolder h5">Projects Done</Text>
-                                                                </span>
-                                                            <h2 className="font-weight-bolder deep-orange-text">
-                                                                <Text family='Alfa Slab One'><strong>{projects&&projects.filter(x => x.status === "Completed").length}</strong></Text>
-                                                            </h2>
+                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100 ">
+                                                            <div className="d-flex flex-row">
+                                                                <div className="mr-2">
+                                                                    <MDBIcon icon="hand-holding-usd" className="border rounded mb-0 white-text p-3"
+                                                                             style={{ backgroundColor: "#f06000", verticalAlign: 'middle' }} size="2x"/>
+                                                                </div>
+                                                                <div className="ml-2 w-100">
+                                                                    <div>
+                                                                        <Text family='Nunito'  className="font-weight-bolder h6 mb-2">Revenue</Text>
+                                                                    </div>
+                                                                    <div className="d-flex flex-row justify-content-between">
+                                                                        <Text family='Nunito'>Earnings: &nbsp;&nbsp;</Text>
+                                                                        <b className="font-weight-bolder">
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{"K500,000"}</Text>
+                                                                        </b>
+                                                                    </div>
+                                                                    <div className="d-flex flex-row justify-content-between">
+                                                                        <Text family='Nunito'>Expenses: &nbsp;&nbsp;</Text>
+                                                                        <b className="font-weight-bolder text-right">
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{"K130,000"}</Text>
+                                                                        </b>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
                                                         </MDBCard>
                                                     </MDBCol>
                                                 </MDBRow>

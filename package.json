@@ -64,6 +64,8 @@
     ]
   },
   "devDependencies": {
-    "@ant-design/colors": "^6.0.0"
+    "@ant-design/colors": "^6.0.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6"
   }
 }
