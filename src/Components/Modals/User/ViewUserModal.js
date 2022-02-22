@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {DatePicker, Form, Input, Select} from "antd";
+import {DatePicker, Form, Input, InputNumber, Select} from "antd";
 import{ init } from 'emailjs-com';
 init("user_2JD2DZg8xAHDW7e9kdorr");
 
@@ -78,6 +78,11 @@ const ViewUserModal = (props) => {
                         ))}
 
                     </Select>
+                </Form.Item>
+                <Form.Item
+                    label="Project Percentage"
+                    name="percentage">
+                    <InputNumber prefix="%" style={{ width: '100%' }} disabled={true} defaultValue={user.percentage}/>
                 </Form.Item>
             </Form>
 

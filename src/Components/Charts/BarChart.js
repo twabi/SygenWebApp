@@ -11,14 +11,14 @@ export const data = [
 ];
 
 export const options = {
-    title: "Population of Largest U.S. Cities",
+    title: "Revenue vs expense",
     chartArea: { width: "50%" },
     hAxis: {
-        title: "Total Population",
+        title: "Revenue",
         minValue: 0,
     },
     vAxis: {
-        title: "City",
+        title: "Project",
     },
 };
 

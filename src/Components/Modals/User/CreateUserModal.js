@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {DatePicker, Form, Input, Select} from "antd";
+import {DatePicker, Form, Input, InputNumber, Select} from "antd";
 import {Button} from "evergreen-ui";
 import FireFetch from "../../Firebase/FireFetch";
 import emailjs from "emailjs-com";
@@ -28,81 +28,71 @@ const CreateUserModal = (props) => {
     }
 
 
-    const addUser = () => {
+    const addUser = (values) => {
         setShowLoading(true);
 
         var timeStamp = moment().format("YYYY-MM-DDTh:mm:ss");
-        var firstname = document.getElementById("firstname").value;
-        var lastname = document.getElementById("surname").value;
-        var email = document.getElementById("email").value
-        var phone = document.getElementById("phone").value;
-        var department = document.getElementById("department").value;
         var randPassword = Array(10).fill("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             .map(function(x) { return x[Math.floor(Math.random() * x.length)] }).join('');
 
-        if(firstname.includes("/") || lastname.includes("/")){
-            alert("The name cannot include a slash, use a dash or another symbol instead")
-        } else {
-            var object = {
-                "firstname" : firstname,
-                "surname" : lastname,
-                "email" : email,
-                "phone" : phone,
-                "gender" : gender,
-                "dateCreated" : timeStamp,
-                "department" : department,
-                "role" : role,
-                //"password" : randPassword
-            };
-            var templateParams = {
-                userEmail: object.email,
-                username: object.firstname + " " + object.surname,
-                userPassword : randPassword
-            };
+        var object = {
+            "firstname" : values.firstname,
+            "surname" : values.surname,
+            "email" : values.email,
+            "phone" : values.phone,
+            "gender" : values.gender,
+            "dateCreated" : timeStamp,
+            "department" : values.department,
+            "role" : values.role,
+            "percentage" : values.percentage
+        };
+        var templateParams = {
+            userEmail: object.email,
+            username: object.firstname + " " + object.surname,
+            userPassword : randPassword
+        };
 
-            SecondaryFirebase.auth().createUserWithEmailAndPassword(email, randPassword)
-                .then((userCredential) => {
-                    var user = userCredential.user;
-                    object.userID = user.uid;
+        SecondaryFirebase.auth().createUserWithEmailAndPassword(values.email, randPassword)
+            .then((userCredential) => {
+                var user = userCredential.user;
+                object.userID = user.uid;
 
-                    const output = FireFetch.SaveTODB("Users", user.uid, object);
-                    output.then((result) => {
-                        console.log(result);
-                        if(result === "success"){
-                            emailjs.send("service_efpjx59","template_lcrv5bc", templateParams)
-                                .then(function(response) {
-                                    console.log('SUCCESS!', response.status, response.text);
-                                }, function(error) {
-                                    console.log('FAILED...', error);
-                                });
-                            setMessage("User added successfully");
-                            setColor("success");
-                            setShowAlert(true);
-                            setShowLoading(false);
-                            SecondaryFirebase.auth().signOut();
-                            setTimeout(() => {
-                                setShowAlert(false);
-                                props.modal(false);
-                            }, 2000);
-
-
-                        }
-                    }).catch((error) => {
-                        setMessage("Unable to add user and error occurred :: " + error);
-                        setColor("danger");
+                const output = FireFetch.SaveTODB("Users", user.uid, object);
+                output.then((result) => {
+                    console.log(result);
+                    if(result === "success"){
+                        emailjs.send("service_efpjx59","template_lcrv5bc", templateParams)
+                            .then(function(response) {
+                                console.log('SUCCESS!', response.status, response.text);
+                            }, function(error) {
+                                console.log('FAILED...', error);
+                            });
+                        setMessage("User added successfully");
+                        setColor("success");
                         setShowAlert(true);
                         setShowLoading(false);
-                    })
+                        SecondaryFirebase.auth().signOut();
+                        setTimeout(() => {
+                            setShowAlert(false);
+                            props.modal(false);
+                        }, 2000);
 
-                })
-                .catch((error) => {
+
+                    }
+                }).catch((error) => {
                     setMessage("Unable to add user and error occurred :: " + error);
                     setColor("danger");
-                    setShowLoading(false);
                     setShowAlert(true);
+                    setShowLoading(false);
                 })
-            
-        }
+
+            })
+            .catch((error) => {
+                setMessage("Unable to add user and error occurred :: " + error);
+                setColor("danger");
+                setShowLoading(false);
+                setShowAlert(true);
+            })
     }
 
 
@@ -118,7 +108,7 @@ const CreateUserModal = (props) => {
                 >
 
                     <Form.Item label="First name"
-                               name="First name"
+                               name="firstname"
                                rules={[{ required: true, message: 'Please input first name!' }]}>
                         <Input placeholder="Enter firstname" id="firstname"/>
                     </Form.Item>
@@ -132,7 +122,7 @@ const CreateUserModal = (props) => {
                         <Input type="email" placeholder="Enter email" id="email"/>
                     </Form.Item>
                     <Form.Item label="Phone"
-                               name="Phone"
+                               name="phone"
                                rules={[{ required: true, message: 'Please input Phone!' },
                                    { min: 9, message: 'phone number must be minimum 9 characters.' },
                                    { max: 13, message: 'phone number cannot exceed 12 characters.' },
@@ -145,7 +135,7 @@ const CreateUserModal = (props) => {
                     </Form.Item>
 
                     <Form.Item label="Gender"
-                               name="Gender"
+                               name="gender"
                                rules={[{ required: true, message: 'Please input gender!' }]}>
                         <Select placeholder="Select gender"
                                 showSearch
@@ -163,11 +153,11 @@ const CreateUserModal = (props) => {
 
                         </Select>
                     </Form.Item>
-                    <Form.Item label="Department">
+                    <Form.Item label="Department" name="department">
                         <Input type="text" placeholder="Enter department" id="department"/>
                     </Form.Item>
                     <Form.Item label="Role"
-                               name="Role"
+                               name="role"
                                rules={[{ required: true, message: 'Please input user Role!' }]}>
                         <Select placeholder="Select role"
                                 showSearch
@@ -186,16 +176,18 @@ const CreateUserModal = (props) => {
 
                         </Select>
                     </Form.Item>
-
-                    <Form.Item>
-                        {showAlert?
-                            <>
-                                <MDBAlert color={color} className="my-3 font-italic" >
-                                    {message}
-                                </MDBAlert>
-                            </>
-                            : null }
+                    <Form.Item
+                        label="Project Percentage"
+                        name="percentage">
+                        <InputNumber prefix="%" style={{ width: '100%' }} />
                     </Form.Item>
+                    {showAlert?
+                        <>
+                            <MDBAlert color={color} className="my-3 font-italic" >
+                                {message}
+                            </MDBAlert>
+                        </>
+                        : null }
 
                     <Button type="primary" htmlType="submit" className="text-white" style={{background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
                         Create

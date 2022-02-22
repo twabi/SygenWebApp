@@ -60,7 +60,7 @@ const Home = () => {
                                             <MDBRow>
                                                 <MDBRow className="w-100">
                                                     <MDBCol>
-                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100">
+                                                        <MDBCard className="m-2 p-3 w-100">
                                                             <div className="d-flex flex-row">
                                                                 <div className="mr-2">
                                                                     <MDBIcon icon="users" className="border rounded mb-0 white-text p-3"
@@ -89,7 +89,7 @@ const Home = () => {
                                                         </MDBCard>
                                                     </MDBCol>
                                                     <MDBCol>
-                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100 ">
+                                                        <MDBCard className="m-2 p-3 w-100 ">
                                                             <div className="d-flex flex-row">
                                                                 <div className="mr-2">
                                                                     <MDBIcon icon="project-diagram" className="border rounded mb-0 white-text p-3"
@@ -117,7 +117,7 @@ const Home = () => {
                                                         </MDBCard>
                                                     </MDBCol>
                                                     <MDBCol>
-                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100">
+                                                        <MDBCard className="m-2 p-3 w-100">
                                                             <div className="d-flex flex-row">
                                                                 <div className="mr-2">
                                                                     <MDBIcon icon="tasks" className="border rounded mb-0 white-text p-3"
@@ -146,7 +146,7 @@ const Home = () => {
                                                         </MDBCard>
                                                     </MDBCol>
                                                     <MDBCol>
-                                                        <MDBCard color={"deep-orange lighten-5"} className="m-2 p-3 w-100 ">
+                                                        <MDBCard className="m-2 p-3 w-100 ">
                                                             <div className="d-flex flex-row">
                                                                 <div className="mr-2">
                                                                     <MDBIcon icon="hand-holding-usd" className="border rounded mb-0 white-text p-3"
@@ -183,28 +183,36 @@ const Home = () => {
                             </MDBRow>
                             <MDBRow>
                                 <Card bordered={false} className="w-100 mt-3 mr-2">
-                                    <MDBCol >
-                                        <div className="py-2 mr-3">
-                                            <div className="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div className="d-block">
-                                                        <h5 className="font-weight-bold">
-                                                            <Text family='Nunito'>
-                                                                Other Details
-                                                            </Text>
-                                                        </h5>
-                                                    </div>
-                                                    {/*<img src={program} className="img-fluid float-left p-4 mt-2" width={220} height={220} alt="" />*/}
-                                                </div>
-
-                                            </div>
-                                            <hr/>
-                                        </div>
-                                    </MDBCol>
 
                                     <MDBRow>
+                                        <MDBCol md={7}>
+                                            <MDBRow className="w-100">
+                                                <Card className="mt-2 w-100">
+                                                    <MDBRow>
+                                                        <MDBCol>
+                                                            <div className="d-block ml-3">
+                                                                <h6 className="font-weight-bold">
+                                                                    <Text family='Nunito'>
+                                                                        Revenue Vs Expense Per Project
+                                                                    </Text>
+                                                                </h6>
+                                                            </div>
+                                                            {/*<img src={program} className="img-fluid float-left p-4 mt-2" width={220} height={220} alt="" />*/}
+                                                        </MDBCol>
 
-                                        <MDBCol md={6}>
+                                                    </MDBRow>
+                                                    <hr/>
+                                                    <MDBRow>
+                                                        <Card bordered={false} className="w-100 bg-white">
+                                                            <BarChart/>
+                                                        </Card>
+
+                                                    </MDBRow>
+
+                                                </Card>
+                                            </MDBRow>
+                                        </MDBCol>
+                                        <MDBCol md={5}>
                                             <MDBRow className="w-100">
                                                 <Card className="mt-2 w-100">
                                                     <MDBRow>
@@ -258,33 +266,7 @@ const Home = () => {
                                                 </Card>
                                             </MDBRow>
                                         </MDBCol>
-                                        <MDBCol md={6}>
-                                            <MDBRow className="w-100">
-                                                <Card className="mt-2 w-100">
-                                                    <MDBRow>
-                                                        <MDBCol>
-                                                            <div className="d-block ml-3">
-                                                                <h6 className="font-weight-bold">
-                                                                    <Text family='Nunito'>
-                                                                        Total Revenue Per project
-                                                                    </Text>
-                                                                </h6>
-                                                            </div>
-                                                            {/*<img src={program} className="img-fluid float-left p-4 mt-2" width={220} height={220} alt="" />*/}
-                                                        </MDBCol>
 
-                                                    </MDBRow>
-                                                    <hr/>
-                                                    <MDBRow>
-                                                        <Card bordered={false} className="w-100 bg-white">
-                                                            <BarChart/>
-                                                        </Card>
-
-                                                    </MDBRow>
-
-                                                </Card>
-                                            </MDBRow>
-                                        </MDBCol>
                                         <MDBCol md={6}>
                                             <MDBRow className="w-100">
                                                 <Card className="mt-2 w-100">

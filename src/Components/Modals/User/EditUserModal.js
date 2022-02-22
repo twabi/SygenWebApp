@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Form, Input, Select} from "antd";
+import {Form, Input, InputNumber, Select} from "antd";
 import {Button} from "evergreen-ui";
 import {MDBAlert} from "mdbreact";
 
@@ -34,25 +34,21 @@ const EditUserModal = (props) => {
         setRole(props.editUser.role);
     }, [props.editUser])
 
-    const editUser = () => {
-
-        var firstname = document.getElementById("firstname").value;
-        var lastname = document.getElementById("surname").value;
-        var email = document.getElementById("email").value
-        var phone = document.getElementById("phone").value;
-        var department = document.getElementById("department").value;
-
+    const editUser = (values) => {
 
         setShowLoading(true);
         var payload = {
-            "firstname" : firstname,
-            "surname" : lastname,
-            "email" : email,
-            "phone" : phone,
-            "gender" : gender,
-            "department" : department,
-            "role" : role,
+            "firstname" : values.firstname,
+            "surname" : values.surname,
+            "email" : values.email,
+            "phone" : values.phone,
+            "gender" : values.gender,
+            "department" : values.department,
+            "role" : values.role,
+            "percentage" : values.percentage
         };
+
+        console.log(payload);
 
         FireFetch.updateInDB("Users", user.userID, payload)
             .then((result) => {
@@ -77,8 +73,6 @@ const EditUserModal = (props) => {
     }
 
 
-
-
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
@@ -88,25 +82,34 @@ const EditUserModal = (props) => {
                 layout="vertical"
                 onFinish={editUser}
                 onFinishFailed={onFinishFailed}
+                initialValues={{
+                    firstname: user.firstname,
+                    surname: user.surname,
+                    email: user.email,
+                    phone: user.phone,
+                    gender: user.gender,
+                    role: user.role,
+                    department: user.department,
+                    percentage: user.percentage,
+                }}
             >
 
-                <Form.Item label="First name">
-                    <Input placeholder="enter user firstname" defaultValue={user.firstname} id="firstname"/>
+                <Form.Item label="First name" name={"firstname"}>
+                    <Input placeholder="enter user firstname" id="firstname"/>
                 </Form.Item>
-                <Form.Item label="Surname">
-                    <Input placeholder="enter user surname" defaultValue={user.surname} id="surname"/>
+                <Form.Item label="Surname" name={"surname"}>
+                    <Input placeholder="enter user surname" id="surname"/>
                 </Form.Item>
-                <Form.Item label="Email" >
-                    <Input type="email" defaultValue={user.email} placeholder="enter user email" id="email"/>
+                <Form.Item label="Email" name={"email"}>
+                    <Input type="email" placeholder="enter user email" id="email"/>
                 </Form.Item>
-                <Form.Item label="Phone">
-                    <Input type="phone" defaultValue={user.phone} placeholder="enter user phone number" id="phone"/>
+                <Form.Item label="Phone" name={"phone"}>
+                    <Input type="phone" placeholder="enter user phone number" id="phone"/>
                 </Form.Item>
 
-                <Form.Item label="Gender">
+                <Form.Item label="Gender" name={"gender"}>
                     <Select placeholder="Select user gender"
                             showSearch
-                            value={gender}
                             optionFilterProp="children"
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -121,13 +124,12 @@ const EditUserModal = (props) => {
 
                     </Select>
                 </Form.Item>
-                <Form.Item label="Department">
-                    <Input type="text" placeholder="enter user department" defaultValue={user.department} id="department"/>
+                <Form.Item label="Department" name={"department"}>
+                    <Input type="text" placeholder="enter user department" id="department"/>
                 </Form.Item>
-                <Form.Item label="Role">
+                <Form.Item label="Role" name={"role"}>
                     <Select placeholder="Select user role"
                             showSearch
-                            value={role}
                             optionFilterProp="children"
                             filterOption={(input, option) =>
                                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -143,8 +145,12 @@ const EditUserModal = (props) => {
 
                     </Select>
                 </Form.Item>
+                <Form.Item
+                    label="Project Percentage"
+                    name="percentage">
+                    <InputNumber prefix="%" style={{ width: '100%' }}/>
+                </Form.Item>
 
-                <Form.Item>
                     {showAlert?
                         <>
                             <MDBAlert color={color} className="my-3 font-italic" >
@@ -152,9 +158,9 @@ const EditUserModal = (props) => {
                             </MDBAlert>
                         </>
                         : null }
-                </Form.Item>
 
-                <Button type="primary" htmlType="submit" className="text-white" style={{background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
+                <Button type="primary" htmlType="submit" className="text-white"
+                        style={{background: "#f06000", borderColor: "#f06000"}} isLoading={showLoading}>
                     Edit
                 </Button>
 

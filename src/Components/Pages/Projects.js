@@ -167,7 +167,7 @@ const Projects = () => {
 
                                                                 {dataArray.map((project, index) => (
                                                                     <MDBListGroupItem key={index}
-                                                                                      className="my-1 border-top border-dark">
+                                                                                      className="my-1 border-top border-gray">
                                                                         <div className="d-flex w-100 my-2 justify-content-between">
                                                                             <div className="d-flex flex-column mt-2">
                                                                                 <h4 className="mb-1 font-weight-bold">{String(project.name).toUpperCase()}</h4>
