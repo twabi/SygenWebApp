@@ -9,7 +9,7 @@ import Firebase from "../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
 import {LineChart} from "../Charts/LineChart";
 import {PieChart} from "../Charts/PieChart";
-import {BarChart} from "../Charts/BarChart";
+import {RevenueVsExpense} from "../Charts/RevenueVsExpense";
 
 
 const userRef = Firebase.database().ref('System/Users');
@@ -204,7 +204,7 @@ const Home = () => {
                                                     <hr/>
                                                     <MDBRow>
                                                         <Card bordered={false} className="w-100 bg-white">
-                                                            <BarChart/>
+                                                            <RevenueVsExpense/>
                                                         </Card>
 
                                                     </MDBRow>

@@ -1,16 +1,7 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { Chart } from "react-google-charts";
 import Firebase from "../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
-
-const data = [
-    ["City", "2010 Population", "2000 Population"],
-    ["New York City, NY", 8175000, 8008000],
-    ["Los Angeles, CA", 3792000, 3694000],
-    ["Chicago, IL", 2695000, 2896000],
-    ["Houston, TX", 2099000, 1953000],
-    ["Philadelphia, PA", 1526000, 1517000],
-];
 
 const options = {
     title: "Revenue vs expense",
@@ -26,9 +17,10 @@ const options = {
 
 const dbRef = Firebase.database().ref('System/Projects');
 const userRef = Firebase.database().ref('System/Users');
-export function BarChart() {
+export function RevenueVsExpense() {
     const [projects] = useListVals(dbRef);
     const [users] = useListVals(userRef);
+    const [dataArray, setDataArray] = useState([]);
 
     useEffect(() => {
         var tempArray = [];
@@ -37,19 +29,34 @@ export function BarChart() {
             tempArray.push(columnArray);
 
             projects.map((project) => {
-                var revenue = project.amount;
-            })
+                var revenue = parseFloat(project.amount);
+                var members = project.members;
+                var memberSum = 0;
+                var budget = project.budget ? project.budget : 0;
+                members.map((item) => {
+                    var member = users[users.findIndex(x => x.userID === item)];
+                    var percentage = member&&parseFloat(member.percentage);
+                    memberSum += percentage;
+                });
+
+                var memberExpense = (memberSum/100) * revenue;
+                var totalExpense = memberExpense + parseFloat(budget);
+                
+                tempArray.push([project.name, revenue, totalExpense]);
+            });
+
+            setDataArray([...tempArray]);
 
         }
 
-    }, [projects])
+    }, [projects, users])
 
     return (
         <Chart
             chartType="BarChart"
             width="100%"
             height="400px"
-            data={data}
+            data={dataArray}
             options={options}
         />
     );
