@@ -1,7 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Chart } from "react-google-charts";
+import Firebase from "../Firebase/Firebase";
+import {useListVals} from "react-firebase-hooks/database";
 
-export const data = [
+const data = [
     ["City", "2010 Population", "2000 Population"],
     ["New York City, NY", 8175000, 8008000],
     ["Los Angeles, CA", 3792000, 3694000],
@@ -10,7 +12,7 @@ export const data = [
     ["Philadelphia, PA", 1526000, 1517000],
 ];
 
-export const options = {
+const options = {
     title: "Revenue vs expense",
     chartArea: { width: "50%" },
     hAxis: {
@@ -22,7 +24,26 @@ export const options = {
     },
 };
 
+const dbRef = Firebase.database().ref('System/Projects');
+const userRef = Firebase.database().ref('System/Users');
 export function BarChart() {
+    const [projects] = useListVals(dbRef);
+    const [users] = useListVals(userRef);
+
+    useEffect(() => {
+        var tempArray = [];
+        if(projects){
+            var columnArray = ["Project", "Revenue", "Expense"];
+            tempArray.push(columnArray);
+
+            projects.map((project) => {
+                var revenue = project.amount;
+            })
+
+        }
+
+    }, [projects])
+
     return (
         <Chart
             chartType="BarChart"

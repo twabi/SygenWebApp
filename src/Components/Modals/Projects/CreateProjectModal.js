@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {DatePicker, Form, Input, Select} from "antd";
+import {DatePicker, Form, Input, InputNumber, Select} from "antd";
 import {Button} from "evergreen-ui";
 import {MDBAlert} from "mdbreact";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -72,50 +72,45 @@ const CreateProjectModal = (props) => {
         var projectID =  Array(20).fill("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             .map(function(x) { return x[Math.floor(Math.random() * x.length)] }).join('');
 
+        console.log(result)
 
-        if(result.name.includes("/")){
-            alert("The name cannot include a slash, use a dash or another symbol instead")
-        } else {
-            var object = {
-                "name" : result.name,
-                "description" : result.description,
-                "startDate" : moment(result.startDate).format("YYYY-MM-DD") ? moment(result.startDate).format("YYYY-MM-DD") : null,
-                "endDate" : moment(result.endDate).format("YYYY-MM-DD"),
-                "type" : result.type,
-                "paymentType" : result.paymentType ? result.paymentType : "",
-                "amount" : result.amount ? result.amount : "",
-                "status" : result.status,
-                "budget" : result.budget,
-                "dateCreated" : timeStamp,
-                "createdByID" : createdByID,
-                "projectID" : projectID,
-                "members" : result.assigned
-            };
+        var object = {
+            "name" : result.name,
+            "description" : result.description,
+            "startDate" : moment(result.startDate).format("YYYY-MM-DD") ? moment(result.startDate).format("YYYY-MM-DD") : null,
+            "endDate" : moment(result.endDate).format("YYYY-MM-DD"),
+            "type" : result.type,
+            "paymentType" : result.paymentType ? result.paymentType : "",
+            "amount" : result.amount ? result.amount : 0,
+            "status" : result.status,
+            "budget" :  result.budget ? result.budget : 0,
+            "dateCreated" : timeStamp,
+            "createdByID" : createdByID,
+            "projectID" : projectID,
+            "members" : result.assigned
+        };
 
-            const output = FireFetch.SaveTODB("Projects", projectID, object);
-            output.then((result) => {
-                console.log(result);
-                if(result === "success"){
-                    setMessage("Project added successfully");
-                    setColor("success");
-                    setShowAlert(true);
-                    setShowLoading(false);
-                    setTimeout(() => {
-                        setShowAlert(false);
-                        props.modal(false);
-                    }, 2000);
-
-                }
-            }).catch((error) => {
-                setMessage("Unable to add project, an error occurred :: " + error);
-                setColor("danger");
+        const output = FireFetch.SaveTODB("Projects", projectID, object);
+        output.then((result) => {
+            console.log(result);
+            if(result === "success"){
+                setMessage("Project added successfully");
+                setColor("success");
                 setShowAlert(true);
                 setShowLoading(false);
-            })
+                setTimeout(() => {
+                    setShowAlert(false);
+                    props.modal(false);
+                }, 2000);
 
+            }
+        }).catch((error) => {
+            setMessage("Unable to add project, an error occurred :: " + error);
+            setColor("danger");
+            setShowAlert(true);
+            setShowLoading(false);
+        })
 
-
-        }
 
     }
 
@@ -192,9 +187,8 @@ const CreateProjectModal = (props) => {
                 </Form.Item>
 
                 <Form.Item label="Enter project budget (If applicable)"
-                           name="budget"
-                           rules={[]}>
-                    <Input type="number" placeholder="enter budget amount" defaultValue={0} id="budget"/>
+                           name="budget">
+                    <Input type="number" className="w-100" placeholder="enter budget amount" defaultValue={0} id="budget"/>
                 </Form.Item>
 
                 <Form.Item label="Payment Type"

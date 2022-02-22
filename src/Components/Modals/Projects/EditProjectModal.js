@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {DatePicker, Form, Input, Select} from "antd";
+import {DatePicker, Form, Input, InputNumber, Select} from "antd";
 import {Button} from "evergreen-ui";
 import FireFetch from "../../Firebase/FireFetch";
 import {MDBAlert} from "mdbreact";
@@ -16,7 +16,6 @@ const EditProjectModal = (props) => {
     const [color, setColor] = useState("info");
     const [message, setMessage] = useState("");
     const [showLoading, setShowLoading] = useState(false);
-    const [filesList, setFilesList] = useState([]);
     const [selectedProject, setSelectedProject] = useState(props.editProject);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -71,9 +70,9 @@ const EditProjectModal = (props) => {
             "endDate" : moment(result.endDate).format("YYYY-MM-DD") ? moment(result.endDate).format("YYYY-MM-DD") : null,
             "type" : result.type,
             "paymentType" : result.paymentType ? result.paymentType : "",
-            "amount" : result.amount ? result.amount : "",
+            "amount" : result.amount ? result.amount : 0,
             "status" : result.status,
-            "budget" : result.budget,
+            "budget" : result.budget ? result.budget : 0,
             "members" : result.members
         };
 
@@ -120,6 +119,7 @@ const EditProjectModal = (props) => {
                     {name: ["amount"], value: selectedProject.amount},
                     {name: ["status"], value: selectedProject.status},
                     {name: ["members"], value: selectedProject.members},
+                    {name: ["budget"], value: selectedProject.budget}
                 ]}
             >
                 <Form.Item label="Project name"
@@ -188,9 +188,8 @@ const EditProjectModal = (props) => {
                 </Form.Item>
 
                 <Form.Item label="Enter project budget (If applicable)"
-                           name="budget"
-                           rules={[]}>
-                    <Input.Number type="number" placeholder="enter budget amount" defaultValue={0} id="amount"/>
+                           name="budget">
+                    <Input className="w-100" type="number" placeholder="enter budget amount" id="budget"/>
                 </Form.Item>
 
                 <Form.Item label="Payment Type"

@@ -387,7 +387,8 @@ const ProjectDetails = () => {
                                                             <List.Item>
                                                                 <Card
                                                                     className="w-100"
-                                                                    actions={[<TrashIcon color="danger" onClick={() => {
+                                                                    actions={[<TrashIcon color="danger" className="mx-3"
+                                                                                         onClick={() => {
                                                                         // eslint-disable-next-line no-restricted-globals
                                                                         if (confirm("Are you sure you want to remove user from this project?")) {
                                                                             deleteMember(item.id)
