@@ -20,7 +20,6 @@ const EditTaskModal = (props) => {
     const [showLoading, setShowLoading] = useState(false);
     const [type, setType] = useState(null);
     const [status, setStatus] = useState(null);
-    const [showBrand, setShowBrand] = useState(false);
     const [deadline, setDeadline] = useState(null);
     const [projects] = useListVals(projectRef);
     const [title, setTitle] = useState(null);
@@ -29,6 +28,7 @@ const EditTaskModal = (props) => {
     const [selectedTask, setSelectedTask] = useState(props.selectedTask);
     const [selectedProject, setSelectedProject] = useState(null);
     const [startDate, setStartDate] = useState(null);
+    const [expense, setExpense] = useState(null);
 
     function onChangeOne(date, dateString) {
         setStartDate(dateString);
@@ -48,11 +48,6 @@ const EditTaskModal = (props) => {
 
     function changeType (selectedOption) {
         setType(selectedOption);
-        if(selectedOption === "Brand Coverage"){
-            setShowBrand(true);
-        } else {
-            setShowBrand(false);
-        }
     }
 
     function changeDate(date, dateString) {
@@ -62,14 +57,6 @@ const EditTaskModal = (props) => {
     useEffect(() => {
 
         setSelectedTask(props.selectedTask);
-        setSelectedUser(props.selectedTask.assignedTo);
-        setSelectedProject(props.selectedTask.projectID);
-        setStatus(props.selectedTask.taskStatus);
-        props.selectedTask.title ? setTitle(props.selectedTask.title) : setTitle("");
-        props.selectedTask.description ? setDesc(props.selectedTask.description) : setDesc("");
-        setType(props.selectedTask.taskType);
-        setDeadline(props.selectedTask.deadline);
-        setStartDate(props.selectedTask.startDate);
 
     }, [props])
 
@@ -88,6 +75,7 @@ const EditTaskModal = (props) => {
             deadline : dateline.format("YYYY-MM-DDTh:mm"),
             assignedTo : values.assigned,
             projectID : values.project,
+            expense : values.expense,
             taskStatus : values.status,
             taskType : values.type
         }
@@ -132,28 +120,31 @@ const EditTaskModal = (props) => {
                 fields={[
                     {
                         name: ["type"],
-                        value: type,
+                        value: selectedTask.taskType,
                     },{
                         name: ["project"],
-                        value: selectedProject,
+                        value: selectedTask.projectID,
                     },{
                         name: ["assigned"],
-                        value: selectedUser,
+                        value: selectedTask.assignedTo,
                     },{
                         name: ["status"],
-                        value: status,
+                        value: selectedTask.taskStatus,
                     },{
                         name: ["title"],
-                        value: title,
+                        value: selectedTask.title,
                     },{
                         name: ["description"],
-                        value: desc,
+                        value: selectedTask.description,
                     },{
                         name: ["startDate"],
-                        value: !startDate ? undefined : moment(startDate, "YYYY-MM-DD h:mm"),
+                        value: !selectedTask.startDate ? undefined : moment(selectedTask.startDate, "YYYY-MM-DD h:mm"),
                     },{
                         name: ["deadline"],
-                        value: !deadline ? undefined : moment(deadline, "YYYY-MM-DD h:mm"),
+                        value: !selectedTask.deadline ? undefined : moment(selectedTask.deadline, "YYYY-MM-DD h:mm"),
+                    }, {
+                        name: ["expense"],
+                        value: selectedTask.expense
                     }
                 ]}
             >
@@ -274,6 +265,12 @@ const EditTaskModal = (props) => {
                         className="w-100"
                         onChange={changeDate} />
 
+                </Form.Item>
+
+                <Form.Item label="Enter estimated task expense (If applicable)"
+                           name="expense"
+                           rules={[]}>
+                    <Input type="number" placeholder="enter expense amount" defaultValue={0} id="expense"/>
                 </Form.Item>
 
 

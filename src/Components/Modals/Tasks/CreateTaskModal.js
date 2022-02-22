@@ -89,6 +89,7 @@ const CreateTaskModal = (props) => {
             assignedTo : values.assigned,
             projectID : values.project,
             taskStatus : values.status,
+            expense : values.expense,
             taskType : values.type
         }
 
@@ -277,6 +278,12 @@ const CreateTaskModal = (props) => {
                         className="w-100"
                         onChange={changeDate} />
 
+                </Form.Item>
+
+                <Form.Item label="Enter estimated task expense (If applicable)"
+                           name="expense"
+                           rules={[]}>
+                    <Input type="number" placeholder="enter expense amount" defaultValue={0} id="expense"/>
                 </Form.Item>
 
 
