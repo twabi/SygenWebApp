@@ -1,5 +1,9 @@
-import React from 'react';
-import { Table } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Table} from 'antd';
+import Firebase from "../Firebase/Firebase";
+import {useListVals} from "react-firebase-hooks/database";
+import {Badge} from "evergreen-ui";
+
 
 const columns = [
     {
@@ -13,35 +17,59 @@ const columns = [
         key: 'project',
     },
     {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+    },
+    {
         title: 'Deadline',
         dataIndex: 'deadline',
         key: 'deadline',
     }
 ];
 
-const data = [
-    {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-    },
-    {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-    },
-    {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-    },
-];
-
+const moment = require("moment");
+const taskRef = Firebase.database().ref('System/Tasks');
+const projRef = Firebase.database().ref('System/Projects');
 export function UpcomingTasks(){
+    const [dataArray, setDataArray] = useState([]);
+    const [tasks] = useListVals(taskRef);
+    const [projects] = useListVals(projRef);
+    
+    useEffect(() => {
+        if(tasks){
+            var tempArray = [];
+            var now = moment.now();
+            console.log(now);
+            var taskArray = tasks.filter(x => x.taskStatus !== "Complete");
+            taskArray.forEach((task) =>{
+                var taskDate = moment(task.deadline, "YYYY-MM-DDTh:mm");
+                task.difference = now - taskDate
+            });
+
+            taskArray.sort((a,b) => {
+                return a.difference - b.difference;
+            });
+
+            console.log(taskArray);
+            taskArray.forEach((task, index) =>{
+                var deadline = moment(task.deadline, "YYYY-MM-DDTh:mm").format("DD MMM YYYY");
+                tempArray.push({
+                    key: index + 1,
+                    task : task.title,
+                    project : projects[projects.findIndex(x => x.projectID === task.projectID)]&&
+                        projects[projects.findIndex(x => x.projectID === task.projectID)].name,
+                    status : <Badge color={task.taskStatus === "Ongoing" ? "neutral" : "red"}>{task.taskStatus}</Badge>,
+                    deadline : <Badge color={moment().isBefore(deadline) ? "green" : "red"}>{deadline}</Badge>
+                });
+            });
+            const size = 5;
+            const items = tempArray.slice(0, size)
+            setDataArray([...items]);
+
+        }
+    }, [projects, tasks])
     return(
-        <Table style={{height: "400px"}} columns={columns} dataSource={data} pagination={false}/>
+        <Table style={{height: "400px", width: "100%"}} columns={columns} dataSource={dataArray} pagination={false}/>
     )
 }
