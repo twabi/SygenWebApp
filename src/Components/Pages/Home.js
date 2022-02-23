@@ -8,8 +8,9 @@ import {Text} from "react-font";
 import Firebase from "../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
 import {LineChart} from "../Charts/LineChart";
-import {PieChart} from "../Charts/PieChart";
+import {ProjectsPerMember} from "../Charts/ProjectsPerMember";
 import {RevenueVsExpense} from "../Charts/RevenueVsExpense";
+import {UpcomingTasks} from "../Charts/UpcomingTasks";
 
 
 const userRef = Firebase.database().ref('System/Users');
@@ -266,7 +267,7 @@ const Home = () => {
                                                             <div className="d-block ml-3">
                                                                 <h6 className="font-weight-bold">
                                                                     <Text family='Nunito'>
-                                                                        Task Completion Rate
+                                                                        Upcoming Task Deadlines
                                                                     </Text>
                                                                 </h6>
                                                             </div>
@@ -277,7 +278,7 @@ const Home = () => {
                                                     <hr/>
                                                     <MDBRow>
                                                         <Card bordered={false} className="w-100 bg-white">
-                                                            <LineChart/>
+                                                            <UpcomingTasks/>
                                                         </Card>
 
                                                     </MDBRow>
@@ -285,7 +286,7 @@ const Home = () => {
                                                 </Card>
                                             </MDBRow>
                                         </MDBCol>
-                                        <MDBCol md={6}>
+                                        <MDBCol md={5}>
                                             <MDBRow className="w-100">
                                                 <Card className="mt-2 w-100">
                                                     <MDBRow>
@@ -293,7 +294,7 @@ const Home = () => {
                                                             <div className="d-block ml-3">
                                                                 <h6 className="font-weight-bold">
                                                                     <Text family='Nunito'>
-                                                                        Projects Per Member
+                                                                        Ongoing Projects per Member
                                                                     </Text>
                                                                 </h6>
                                                             </div>
@@ -304,7 +305,7 @@ const Home = () => {
                                                     <hr/>
                                                     <MDBRow>
                                                         <Card bordered={false} className="w-100 bg-white">
-                                                            <PieChart/>
+                                                            <ProjectsPerMember/>
                                                         </Card>
 
                                                     </MDBRow>
