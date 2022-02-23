@@ -5,14 +5,14 @@ import {useListVals} from "react-firebase-hooks/database";
 
 const options = {
     title: "Revenue vs expense",
-    chartArea: { width: "50%" },
+    chartArea: { width: "70%", left:'20%', right:'19%',},
     hAxis: {
         title: "Revenue",
         minValue: 0,
     },
     vAxis: {
         title: "Project",
-    },
+    }
 };
 
 const dbRef = Firebase.database().ref('System/Projects');
@@ -55,6 +55,7 @@ export function RevenueVsExpense() {
         <Chart
             chartType="BarChart"
             width="100%"
+            className="w-100"
             height="400px"
             data={dataArray}
             options={options}

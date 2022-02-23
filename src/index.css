@@ -37,3 +37,7 @@ code {
   height: 800px;
   overflow-y: auto;
 }
+
+.chartRevenue text {
+  font-size: 6px; /* or any other smaller font size you want */
+}

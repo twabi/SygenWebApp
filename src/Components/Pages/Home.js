@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Avatar, Card, Layout} from 'antd';
 import NavBar from "../Navbars/NavBar";
 import SideBar from "../Navbars/SideBar";
@@ -26,6 +26,39 @@ const Home = () => {
     const [users] = useListVals(userRef);
     const [tasks] = useListVals(taskRef);
     const [projects] = useListVals(projRef);
+    const [money, setMoney] = useState(null);
+    
+    useEffect(() => {
+        if(projects){
+            var revenueSum = 0;
+            var expenseSum = 0;
+            projects.map((project) => {
+                var revenue = parseFloat(project.amount);
+                revenueSum += revenue? revenue : 0;
+                var members = project.members;
+                var memberSum = 0;
+                var budget = project.budget ? project.budget : 0;
+                members.map((item) => {
+                    var member = users[users.findIndex(x => x.userID === item)];
+                    var percentage = member&&parseFloat(member.percentage);
+                    memberSum += percentage;
+                });
+
+                var memberExpense = (memberSum/100) * revenue;
+                var totalExpense = memberExpense + parseFloat(budget);
+                expenseSum += totalExpense? totalExpense : 0;
+            });
+
+
+            var object = {"earnings" : revenueSum, "expenses" : expenseSum};
+            setMoney(object);
+
+        }
+    }, [projects, users]);
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
     return (
         <>
@@ -43,19 +76,32 @@ const Home = () => {
                             <MDBRow>
                                 <Card bordered={false} className="w-100 mr-2">
                                     <div className="text-left">
-                                        <div className="d-block">
-                                            <h5 className="font-weight-bold">
-                                                <Text family='Nunito'>
-                                                    Statistics
+                                        <div className="d-block w-100 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 className="font-weight-bold">
+                                                    <Text family='Nunito'>
+                                                        Statistics
+                                                    </Text>
+                                                </h5>
+                                                <MDBCardText>
+                                                    <Text family='Nunito'>
+                                                        An overview of system stats
+                                                    </Text>
+                                                </MDBCardText>
+                                            </div>
+                                            <div>
+                                                <Text family='Nunito' className="font-weight-bold">
+                                                    PROFIT
                                                 </Text>
-                                            </h5>
-                                            <MDBCardText>
-                                                <Text family='Nunito'>
-                                                    An overview of system stats
-                                                </Text>
-                                            </MDBCardText>
-                                            <hr/>
+                                                <b className="font-weight-bold h5">
+                                                    <Text family='Nunito'>
+                                                        K{money&&numberWithCommas(money.earnings - money.expenses)}
+                                                    </Text>
+                                                </b>
+                                            </div>
+
                                         </div>
+                                        <hr/>
                                         <div className="mt-4 py-1">
                                             <MDBRow>
                                                 <MDBRow className="w-100">
@@ -159,13 +205,13 @@ const Home = () => {
                                                                     <div className="d-flex flex-row justify-content-between">
                                                                         <Text family='Nunito'>Earnings: &nbsp;&nbsp;</Text>
                                                                         <b className="font-weight-bolder">
-                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{"K500,000"}</Text>
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">K{money&&numberWithCommas(money.earnings)}</Text>
                                                                         </b>
                                                                     </div>
                                                                     <div className="d-flex flex-row justify-content-between">
                                                                         <Text family='Nunito'>Expenses: &nbsp;&nbsp;</Text>
                                                                         <b className="font-weight-bolder text-right">
-                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">{"K130,000"}</Text>
+                                                                            <Text family='Nunito' className="deep-orange-text font-weight-bolder">K{money&&numberWithCommas(money.expenses)}</Text>
                                                                         </b>
                                                                     </div>
 
