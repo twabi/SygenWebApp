@@ -22,11 +22,9 @@ export function ProjectsPerMember() {
             tempArray.push(columnArray);
             var ongoing = projects.filter(x => x.status === "Ongoing");
             
-            console.log(ongoing);
             users.map((user) => {
                 if((user.role).toLowerCase() !== "team leader"){
                     var memberArray = ongoing.filter(x => x.members.includes(user.userID));
-                    console.log(memberArray);
                     var projectNumber = memberArray.length;
 
                     var userCol = [user.firstname + " " + user.surname, projectNumber];

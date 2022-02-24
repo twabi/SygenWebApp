@@ -40,7 +40,6 @@ export function UpcomingTasks(){
         if(tasks){
             var tempArray = [];
             var now = moment.now();
-            console.log(now);
             var taskArray = tasks.filter(x => x.taskStatus !== "Complete");
             taskArray.forEach((task) =>{
                 var taskDate = moment(task.deadline, "YYYY-MM-DDTh:mm");
@@ -51,7 +50,6 @@ export function UpcomingTasks(){
                 return a.difference - b.difference;
             });
 
-            console.log(taskArray);
             taskArray.forEach((task, index) =>{
                 var deadline = moment(task.deadline, "YYYY-MM-DDTh:mm").format("DD MMM YYYY");
                 tempArray.push({

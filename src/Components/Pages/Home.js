@@ -7,7 +7,7 @@ import { MDBCard, MDBCardText } from 'mdbreact';
 import {Text} from "react-font";
 import Firebase from "../Firebase/Firebase";
 import {useListVals} from "react-firebase-hooks/database";
-import {LineChart} from "../Charts/LineChart";
+import {ProjectsCreated} from "../Charts/ProjectsCreated";
 import {ProjectsPerMember} from "../Charts/ProjectsPerMember";
 import {RevenueVsExpense} from "../Charts/RevenueVsExpense";
 import {UpcomingTasks} from "../Charts/UpcomingTasks";
@@ -267,7 +267,7 @@ const Home = () => {
                                                             <div className="d-block ml-3">
                                                                 <h6 className="font-weight-bold">
                                                                     <Text family='Nunito'>
-                                                                        Upcoming Task Deadlines
+                                                                        Latest Task Deadlines
                                                                     </Text>
                                                                 </h6>
                                                             </div>
@@ -314,7 +314,7 @@ const Home = () => {
                                             </MDBRow>
                                         </MDBCol>
 
-                                        <MDBCol md={6}>
+                                        <MDBCol md={7}>
                                             <MDBRow className="w-100">
                                                 <Card className="mt-2 w-100">
                                                     <MDBRow>
@@ -333,7 +333,7 @@ const Home = () => {
                                                     <hr/>
                                                     <MDBRow>
                                                         <Card bordered={false} className="w-100 bg-white">
-                                                            <LineChart/>
+                                                            <ProjectsCreated/>
                                                         </Card>
 
                                                     </MDBRow>
